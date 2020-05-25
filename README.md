@@ -4,6 +4,6 @@ Builder pour les images web de MilleGrilles
 
 Noeuds :
 
-# www (public)
-# prive
-# protege (incluant coupdoeil)
+* www (public)
+* prive
+* protege (incluant coupdoeil)
