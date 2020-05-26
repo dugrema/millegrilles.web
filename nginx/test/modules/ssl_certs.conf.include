@@ -1,5 +1,6 @@
 # Certificat SSL avec OCSP
-ssl_certificate /certs/3N4iqEp3HxNN.pki.coupdoeil.cert.20200524123020;
+ssl_certificate     /certs/3N4iqEp3HxNN.pki.coupdoeil.cert.20200524123020;
 ssl_certificate_key /certs/3N4iqEp3HxNN.pki.coupdoeil.key.20200524123020;
-ssl_stapling on;
+
+ssl_stapling        on;
 ssl_stapling_verify on;

@@ -1,4 +1,6 @@
 # Fontions de l'API d'authentification - DEV ONLY (inclus sous /millegrilles en prod)
+
+# Chargement de l'application React
 location = /millegrilles {
   proxy_pass        http://192.168.1.131:3001;
   proxy_set_header  X-Real-IP $remote_addr;
@@ -6,6 +8,7 @@ location = /millegrilles {
   proxy_set_header  X-Forwarded-Proto $scheme;
 }
 
+# Chargement des ressources de l'application React
 location /millegrilles/static {
   proxy_pass        http://192.168.1.131:3001;
   proxy_set_header  X-Real-IP $remote_addr;
