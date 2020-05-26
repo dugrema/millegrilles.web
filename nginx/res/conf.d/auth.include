@@ -1,0 +1,5 @@
+# Activer l'auth plugin
+auth_request      /millegrilles/authentification/verifier;
+
+# Retourner l'identificateur usager
+auth_request_set  $auth_user $upstream_http_user_prive;
