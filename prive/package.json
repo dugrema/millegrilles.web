@@ -5,7 +5,7 @@
   "main": "./bin/www.js",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./build_script.sh"
   },
   "repository": {
     "type": "git",
@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/dugrema/millegrilles.web#readme",
   "dependencies": {
-    "@dugrema/millegrilles.common": "^1.26.1",
-    "express": "^4.17.1",
     "millegrilles.maitrecomptes": "git+ssh://git.maceroc.com/git/millegrilles.maitrecomptes.git#1.26",
-    "react": "^16.13.1",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
     "react-scripts": "^3.4.1"
   }
 }
