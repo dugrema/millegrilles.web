@@ -5,9 +5,6 @@ CERT_FOLDER=/home/mathieu/mgdev/certs
 # export MG_CONSIGNATION_PATH=/var/opt/millegrilles/$IDMG/mounts/consignation
 export HOST=`hostname`
 
-# CERT_FOLDER=/opt/millegrilles/$MG_NOM_MILLEGRILLE/pki/deployeur
-CERT_FOLDER=/home/mathieu/mgdev/certs
-
 # export COUPDOEIL_SESSION_TIMEOUT=15000
 export MG_MQ_CAFILE=$CERT_FOLDER/pki.millegrille.cert
 export MG_MQ_CERTFILE=$CERT_FOLDER/pki.coupdoeil.cert
