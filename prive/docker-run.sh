@@ -33,4 +33,4 @@ docker run --rm -it \
   -v /home/mathieu/mgdev/certs:/certs \
   -e MG_MQ_CAFILE -e MG_MQ_CERTFILE -e MG_MQ_KEYFILE \
   -e MG_MQ_URL -e PORT \
-  $IMAGE_DOCKER bash
+  $IMAGE_DOCKER
