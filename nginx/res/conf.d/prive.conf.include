@@ -17,7 +17,10 @@ server {
       return 301 https://$http_host/millegrilles;
     }
 
+    # *** DEV INCLUDES, permet override /millegrilles pour React ***
+    include /etc/nginx/conf.d/modules/prive_dev.include;
+
     # Composant authentification /millegrilles
-    include /etc/nginx/conf.d/millegrilles_component.include;
+    include /etc/nginx/conf.d/component_millegrilles.include;
 
 }

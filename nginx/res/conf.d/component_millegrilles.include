@@ -17,9 +17,6 @@ location = /millegrilles/authentification/verifier {
   proxy_set_header  X-Forwarded-Proto $scheme;
 }
 
-# *** DEV INCLUDES, permet override /millegrilles pour React ***
-include /etc/nginx/conf.d/modules/prive_dev.include;
-
 # API millegrilles, proteger via auth plugin
 location /millegrilles/api {
 

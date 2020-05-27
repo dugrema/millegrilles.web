@@ -1,4 +1,4 @@
 # Configuration du proxy pass pour NodeJS prive
 
 # Exemple :
-proxy_pass https://mg-dev4:3000;
+proxy_pass https://mg-dev4:3001;
