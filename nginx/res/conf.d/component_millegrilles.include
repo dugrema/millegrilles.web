@@ -1,0 +1,57 @@
+error_page 401 = @error401;
+
+# If the user is not logged in, redirect them to the login URL
+location @error401 {
+  return 302 https://$http_host/millegrilles?url=https://$http_host$request_uri;
+}
+
+# Verification de l'authentification
+# Invoque pour **chaque** appel a nginx sous une page prive/protegee
+location = /millegrilles/authentification/verifier {
+  include /etc/nginx/conf.d/modules/proxypass_millegrilles.include;
+  proxy_pass_request_body off; # no need to send the POST body
+
+  proxy_set_header  Content-Length "";
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+}
+
+# *** DEV INCLUDES, permet override /millegrilles pour React ***
+include /etc/nginx/conf.d/modules/prive_dev.include;
+
+# API millegrilles, proteger via auth plugin
+location /millegrilles/api {
+
+  # Protection via auth plugin
+  include /etc/nginx/conf.d/auth.include;
+
+  include /etc/nginx/conf.d/modules/proxypass_millegrilles.include;
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+}
+
+# Application React - s'occupe de l'authentification (non protege)
+location /millegrilles {
+  include /etc/nginx/conf.d/modules/proxypass_millegrilles.include;
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+}
+
+# Pour toute autre location, appliquer les regles d'authentification
+#location / {
+#
+#  # Protection via auth plugin
+#  include /etc/nginx/conf.d/auth.include;
+#
+#  include /etc/nginx/conf.d/modules/proxypass_millegrilles.include;
+#
+#  # Support WSS
+#  proxy_set_header  Upgrade $http_upgrade;
+#  proxy_set_header  Connection $connection_upgrade;
+#  proxy_read_timeout 86400;
+#
+#  proxy_set_header  Remote-User $auth_user;
+#}
