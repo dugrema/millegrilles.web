@@ -1,4 +1,4 @@
-# Configuration du proxy pass pour NodeJS prive
+# Configuration du proxy pass pour NodeJS millegrilles API
 
 # Exemple :
 proxy_pass https://mg-dev4:3001;

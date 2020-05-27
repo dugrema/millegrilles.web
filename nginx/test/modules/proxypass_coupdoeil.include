@@ -1,4 +1,4 @@
-# Configuration du proxy pass pour NodeJS prive
+# Configuration du proxy pass pour NodeJS Coupdoeil API
 
 # Exemple :
-proxy_pass https://mg-dev4:3000;
+proxy_pass https://mg-dev4:3003;
