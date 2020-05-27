@@ -61,8 +61,11 @@ server {
       include /etc/nginx/conf.d/auth.include;
 
       include /etc/nginx/conf.d/modules/proxypass_prive.include;
+
+      # Support WSS
       proxy_set_header  Upgrade $http_upgrade;
       proxy_set_header  Connection $connection_upgrade;
+      proxy_read_timeout 86400;
 
       proxy_set_header  Remote-User $auth_user;
     }
