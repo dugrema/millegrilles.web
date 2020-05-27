@@ -2,7 +2,7 @@ error_page 401 = @error401;
 
 # If the user is not logged in, redirect them to the login URL
 location @error401 {
-  return 302 https://$http_host/millegrilles?url=https://$http_host$request_uri;
+  return 307 https://$http_host/millegrilles?url=https://$http_host$request_uri;
 }
 
 # Verification de l'authentification
