@@ -1,4 +1,4 @@
-const debug = require('debug')('millegrilles:app')
+const debug = require('debug')('millegrilles:appPrivee')
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const { v4: uuidv4 } = require('uuid')
