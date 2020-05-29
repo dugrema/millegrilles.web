@@ -14,7 +14,10 @@ location /coupdoeil {
   proxy_set_header  Upgrade $http_upgrade;
   proxy_set_header  Connection $connection_upgrade;
   proxy_set_header  Host $host;
-  proxy_read_timeout 86400;
 
+  # Header auth pour s'assurer que le compte est celui du proprietaire de la MilleGrille
+  proxy_set_header  Est-Proprietaire $auth_proprietaire;
+
+  proxy_read_timeout 86400;
 
 }
