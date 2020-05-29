@@ -2,6 +2,7 @@ const debug = require('debug')('millegrilles:app')
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const { v4: uuidv4 } = require('uuid')
+const logger = require('morgan')
 
 // const routeAuthentification = require('./routes/authentification')
 const {routeMillegrilles, sessionsUsager, comptesUsagers, amqpdao} = require('millegrilles.maitrecomptes')
@@ -14,7 +15,7 @@ const secretCookiesPassword = uuidv4()
 var _idmg = null
 const _rabbitMQParIdmg = {}
 function fctRabbitMQParIdmg(idmg) {
-  return rabbitMQParIdmg[idmg]
+  return _rabbitMQParIdmg[idmg]
 }
 
 async function initialiserApp() {
@@ -26,6 +27,8 @@ async function initialiserApp() {
   // Conserver information IDMG et MilleGrilles
   _idmg = instAmqpdao.pki.idmg
   _rabbitMQParIdmg[_idmg] = instAmqpdao
+
+  initLogging(app)                 // HTTP request logging
 
   app.use(cookieParser(secretCookiesPassword))
   app.use(injecterComptesUsagers)  // Injecte req.comptesUsagers
@@ -46,5 +49,11 @@ async function initialiserApp() {
 
   return app
 }
+
+function initLogging(app) {
+  const loggingType = process.env.NODE_ENV !== 'production' ? 'dev' : 'combined';
+  app.use(logger(loggingType));  // logging
+}
+
 
 module.exports = {initialiserApp, coupdoeilSocketIo}
