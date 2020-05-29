@@ -1,7 +1,7 @@
 {
-  "name": "millegrilles.web.prive",
+  "name": "millegrilles.web",
   "version": "1.26.0",
-  "description": "Package web prive pour MilleGrilles",
+  "description": "Package web pour MilleGrilles",
   "main": "./bin/www.js",
   "scripts": {
     "start": "node ./bin/www",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/dugrema/millegrilles.web#readme",
   "dependencies": {
     "millegrilles.maitrecomptes": "git+ssh://git.maceroc.com/git/millegrilles.maitrecomptes.git#1.26",
+    "millegrilles.coupdoeil": "git+ssh://git.maceroc.com/git/millegrilles.coupdoeil.git#1.26",
     "express": "^4.17.1"
   },
   "devDependencies": {

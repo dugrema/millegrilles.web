@@ -1,6 +1,6 @@
 const debug = require('debug')('millegrilles:www');
 const server = require('./server')
-const {initialiserApp} = require('./appPrivee');
+const {initialiserApp} = require('./app');
 
 async function init() {
   const app = await initialiserApp()
