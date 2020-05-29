@@ -2,3 +2,4 @@
 
 # Exemple :
 proxy_pass https://mg-dev4:3001;
+#proxy_pass https://mg-dev4:3000;

@@ -3,7 +3,7 @@
 source image_info.txt
 
 # Override version (e.g. pour utiliser x86_64_...)
-VERSION=x86_64_1.26.0
+VERSION=x86_64_1.26.1
 IMAGE_DOCKER=$REPO/$NAME:$VERSION
 
 echo Image docker : $IMAGE_DOCKER
@@ -26,7 +26,7 @@ export MG_MQ_CAFILE=/certs/3N4iqEp3HxNN.pki.millegrille.cert.20200524123014
 export MG_MQ_CERTFILE=/certs/3N4iqEp3HxNN.pki.coupdoeil.cert.20200524123020
 export MG_MQ_KEYFILE=/certs/3N4iqEp3HxNN.pki.coupdoeil.key.20200524123020
 export MG_MQ_URL=amqps://$HOST:5673
-export PORT=3001
+export PORT=3000
 
 docker run --rm -it \
   --network host \
