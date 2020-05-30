@@ -87,7 +87,7 @@ BUILD_FILE="${NAME}.${VERSION}.tar.gz"
 BUILD_PATH=/home/mathieu/git/millegrilles.web/millegrilles_web/tmp
 
 echo "S'assurer que toutes les dependances sont presentes"
-# rm -rf node_modules/millegrilles.coupdoeil node_modules/millegrilles.maitrecomptes
-# npm i --production
+rm -rf $REP_STATIC_GLOBAL node_modules/millegrilles.coupdoeil node_modules/millegrilles.maitrecomptes
+npm i --production
 
 traiter_fichier_react
