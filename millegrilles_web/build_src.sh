@@ -1,7 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-installer_app() {
+source image_info.txt
+
+echo "Nom build : $NAME"
+
+build_app() {
   REP_SRC=$1
   REP_TMP=$2
   REP_STATIC=$3
@@ -26,19 +30,58 @@ installer_app() {
   cp -r ./build/* $REP_STATIC
 }
 
+build_react() {
+  echo "Build maitre des comptes (/millegrilles)"
+  REP_COMPTES_SRC="$REP_COURANT/node_modules/millegrilles.maitrecomptes/client"
+  REP_COMPTES_TMP="$REP_COURANT/tmp/maitrecomptes"
+  REP_COMPTES_STATIC="$REP_STATIC_GLOBAL/millegrilles/"
+  build_app $REP_COMPTES_SRC $REP_COMPTES_TMP $REP_COMPTES_STATIC
+
+  echo "Build Coup D'Oeil (/coupdoeil)"
+  REP_COUPDOEIL_SRC="$REP_COURANT/node_modules/millegrilles.coupdoeil/client"
+  REP_COUPDOEIL_TMP="$REP_COURANT/tmp/coupdoeil"
+  REP_COUPDOEIL_STATIC="$REP_STATIC_GLOBAL/coupdoeil/"
+  build_app $REP_COUPDOEIL_SRC $REP_COUPDOEIL_TMP $REP_COUPDOEIL_STATIC
+
+  tar -zcf ../$BUILD_FILE $REP_STATIC_GLOBAL
+}
+
+telecharger_static() {
+  echo "Telecharger le repertoire static"
+  sftp ${URL_SERVEUR_DEV}:${BUILD_PATH}/$BUILD_FILE
+  if [ $? -ne 0 ]; then
+    echo "Erreur download fichier react"
+    exit 1
+  fi
+  echo "Nouvelle version du fichier react telechargee"
+}
+
+traiter_fichier_react() {
+  # Decide si on bati ou telecharge un package pour le build react.
+  # Les RPi sont tres lents pour batir le build, c'est mieux de juste recuperer
+  # celui qui est genere sur une workstation de developpement.
+
+  ARCH=`uname -m`
+  rm -f ${NAME}.*.tar.gz
+
+  if [ $ARCH == 'x86_64' ] || [ -z $URL_SERVEUR_DEV ]; then
+    # Si on est sur x86_64, faire le build
+    echo "Architecture $ARCH (ou URL serveur DEV non inclus), on fait un nouveau build React"
+    build_react
+  else
+    # Sur un RPi (aarch64, armv7l), on fait juste telecharger le repertoire static
+    echo "Architecture $ARCH, on va chercher le fichier avec le build pour React sur $URL_SERVEUR_DEV"
+    telecharger_static
+  fi
+}
+
 REP_COURANT=`pwd`
+REP_STATIC_GLOBAL=${REP_COURANT}/static
+BUILD_FILE="${NAME}.${VERSION}.tar.gz"
+BUILD_PATH=/home/mathieu/git/millegrilles.web/millegrilles_web/tmp
 
 echo "S'assurer que toutes les dependances sont presentes"
-npm i
+rm -rf node_modules/millegrilles.coupdoeil node_modules/millegrilles.maitrecomptes
+npm i --production
 
-echo "Build maitre des comptes (/millegrilles)"
-REP_COMPTES_SRC="$REP_COURANT/node_modules/millegrilles.maitrecomptes/client"
-REP_COMPTES_TMP="$REP_COURANT/tmp/maitrecomptes"
-REP_COMPTES_STATIC="$REP_COURANT/static/millegrilles/"
-installer_app $REP_COMPTES_SRC $REP_COMPTES_TMP $REP_COMPTES_STATIC
-
-echo "Build Coup D'Oeil (/coupdoeil)"
-REP_COUPDOEIL_SRC="$REP_COURANT/node_modules/millegrilles.coupdoeil/client"
-REP_COUPDOEIL_TMP="$REP_COURANT/tmp/coupdoeil"
-REP_COUPDOEIL_STATIC="$REP_COURANT/static/coupdoeil/"
-installer_app $REP_COUPDOEIL_SRC $REP_COUPDOEIL_TMP $REP_COUPDOEIL_STATIC
+traiter_fichier_react
