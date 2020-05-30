@@ -12,4 +12,4 @@ COPY res/*.* /etc/nginx/conf.d
 
 WORKDIR $APP_BUNDLE_DIR
 
-CMD ["/opt/nginx/dist/run.sh"]
+# CMD ["/opt/nginx/dist/run.sh"]
