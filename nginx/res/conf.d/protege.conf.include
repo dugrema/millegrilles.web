@@ -18,7 +18,7 @@ server {
     }
 
     # *** DEV INCLUDES, permet override /millegrilles pour React ***
-    #include /etc/nginx/conf.d/modules/protege_dev.include;
+    include /etc/nginx/conf.d/modules/protege_dev.include;
 
     # Composant authentification /millegrilles
     include /etc/nginx/conf.d/component_millegrilles.include;
