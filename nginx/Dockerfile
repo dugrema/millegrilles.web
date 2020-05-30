@@ -6,9 +6,9 @@ ENV APP_BUNDLE_DIR=/opt/nginx/dist
 EXPOSE 80 443
 VOLUME /etc/nginx/conf.d /etc/nginx/conf.d/modules /usr/share/nginx/html
 
-COPY res/ res/
+COPY res/*.* /etc/nginx/conf.d
 
-RUN chmod 755 /res/scripts/* && /res/scripts/setup.sh
+# RUN chmod 755 /res/scripts/* && /res/scripts/setup.sh
 
 WORKDIR $APP_BUNDLE_DIR
 

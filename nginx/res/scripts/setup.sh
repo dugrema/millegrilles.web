@@ -10,13 +10,13 @@ mkdir -p $APP_BUNDLE_DIR
 
 # Remplacer le fichier de configuration default.conf, copier tous les
 # fichiers de configuration locaux. Aussi faire un backup des fichiers dans dist.
-echo "Override du fichier default.conf"
-rm /etc/nginx/conf.d/default.conf
-cp $APP_SOURCE_DIR/conf.d/* /etc/nginx/conf.d/
+# echo "Override du fichier default.conf"
+# rm /etc/nginx/conf.d/default.conf
+# cp $APP_SOURCE_DIR/res/conf.d/* /etc/nginx/conf.d/
 
-echo "Copier run.sh vers $APP_BUNDLE_DIR"
-mv $APP_SOURCE_DIR/scripts/run.sh $APP_BUNDLE_DIR
-chmod u+x $APP_BUNDLE_DIR/run.sh
+# echo "Copier run.sh vers $APP_BUNDLE_DIR"
+# mv $APP_SOURCE_DIR/scripts/run.sh $APP_BUNDLE_DIR
+# chmod u+x $APP_BUNDLE_DIR/run.sh
 
 echo
 echo "Fichiers dans /etc/nginx/conf.d :"
