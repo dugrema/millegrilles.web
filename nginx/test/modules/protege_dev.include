@@ -5,7 +5,7 @@
 # /millegrilles/sock-js.node
 # /millegrilles/main.*
 # /millegrilles/static/*
-location ~ (^/millegrilles$|^/millegrilles/(sock-js.node|main\..*|static/)) {
+location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
  proxy_pass        http://mg-dev4.maple.maceroc.com:3002;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -17,7 +17,7 @@ location ~ (^/millegrilles$|^/millegrilles/(sock-js.node|main\..*|static/)) {
 # /coupdoeil/sock-js.node
 # /coupdoeil/main.*
 # /coupdoeil/static/*
-location ~ (^/coupdoeil$|^/coupdoeil/(sock-js.node|static|main\..*)) {
+location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
  # Protection via auth plugin
  include /etc/nginx/conf.d/auth.include;
 
@@ -25,6 +25,11 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sock-js.node|static|main\..*)) {
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
 }
 
 # Site de test
