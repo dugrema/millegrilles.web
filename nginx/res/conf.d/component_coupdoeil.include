@@ -20,5 +20,4 @@ location /coupdoeil {
   proxy_set_header  idmg              $auth_idmg;
 
   proxy_read_timeout 86400;
-
 }

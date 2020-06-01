@@ -32,6 +32,27 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
  proxy_set_header  Host $host;
 }
 
+# Chargement de /posteur via dev React
+# /posteur
+# /posteur/sock-js.node
+# /posteur/main.*
+# /posteur/static/*
+location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
+ # Protection via auth plugin
+ include /etc/nginx/conf.d/auth.include;
+
+ proxy_pass        https://mg-dev4.maple.maceroc.com:3006;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
+}
+
+
 # Site de test
 location /prive {
  include           /etc/nginx/conf.d/auth.include;

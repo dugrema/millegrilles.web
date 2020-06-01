@@ -1,0 +1,2 @@
+# Application /coupdoeil
+include /etc/nginx/conf.d/component_coupdoeil.include;
