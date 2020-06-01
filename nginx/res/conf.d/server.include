@@ -4,7 +4,7 @@ server {
     listen 443 ssl http2; # we enable SPDY here
     listen [::]:443 ssl http2 ipv6only=on;
 
-    include /etc/nginx/conf.d/modules/protege_server.include;
+    include /etc/nginx/conf.d/modules/server_name.include;
 
     include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
     include /etc/nginx/conf.d/ssl_params.conf.include;
@@ -21,5 +21,5 @@ server {
     include /etc/nginx/conf.d/component_millegrilles.include;
 
     # Inclure les autres sites sous le noeud protege
-    include /etc/nginx/conf.d/modules/protege_locations.include;
+    include /etc/nginx/conf.d/modules/locations.include;
 }

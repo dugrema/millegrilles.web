@@ -31,7 +31,10 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
   proxy_set_header  Connection $connection_upgrade;
   proxy_set_header  Host $host;
 }
-include /etc/nginx/conf.d/component_coupdoeil.include;
+location /coupdoeil {
+  proxy_pass https://mg-dev4.maple.maceroc.com:3004;
+  include /etc/nginx/conf.d/component_base.include;
+}
 
 # Chargement de /posteur via dev React
 # /posteur
@@ -52,12 +55,15 @@ location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
  proxy_set_header  Connection $connection_upgrade;
  proxy_set_header  Host $host;
 }
-
+location /posteur {
+  proxy_pass https://mg-dev4.maple.maceroc.com:3006;
+  include /etc/nginx/conf.d/component_base.include;
+}
 
 # Site de test
 location /prive {
  include           /etc/nginx/conf.d/auth.include;
- include           /etc/nginx/conf.d/modules/proxypass_millegrilles.include;
+ include           /etc/nginx/conf.d/modules/proxypass.include;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
