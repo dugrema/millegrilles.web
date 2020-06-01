@@ -56,7 +56,7 @@ location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
  proxy_set_header  Host $host;
 }
 location /posteur {
-  proxy_pass https://mg-dev4.maple.maceroc.com:3003;
+  proxy_pass https://mg-dev4.maple.maceroc.com:3005;
   include /etc/nginx/conf.d/component_base.include;
 }
 
