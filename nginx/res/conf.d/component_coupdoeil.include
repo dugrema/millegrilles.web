@@ -16,7 +16,8 @@ location /coupdoeil {
   proxy_set_header  Host $host;
 
   # Header auth pour s'assurer que le compte est celui du proprietaire de la MilleGrille
-  proxy_set_header  Est-Proprietaire $auth_proprietaire;
+  proxy_set_header  Est-Proprietaire  $auth_proprietaire;
+  proxy_set_header  idmg              $auth_idmg;
 
   proxy_read_timeout 86400;
 

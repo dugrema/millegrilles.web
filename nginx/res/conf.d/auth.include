@@ -4,3 +4,4 @@ auth_request      /millegrilles/authentification/verifier;
 # Retourner l'identificateur usager
 auth_request_set  $auth_user $upstream_http_user_prive;
 auth_request_set  $auth_proprietaire $upstream_http_est_proprietaire;
+auth_request_set  $auth_idmg $upstream_http_idmg;
