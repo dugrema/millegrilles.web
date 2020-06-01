@@ -14,10 +14,14 @@ CMD [ "npm", "start" ]
 
 COPY package*     $APP_FOLDER/
 COPY bin          $APP_FOLDER/bin/
+COPY models       $APP_FOLDER/models/
 COPY static       $APP_FOLDER/static/
 
 # Mettre a jour code dependances MilleGrilles
 # COPY node_modules $APP_FOLDER/node_modules/
 # RUN rm -rf node_modules/millegrilles.coupdoeil node_modules/millegrilles.maitrecomptes
+
+COPY node_modules/millegrilles.common         $APP_FOLDER/node_modules/millegrilles.common/
+COPY node_modules/millegrilles.posteur        $APP_FOLDER/node_modules/millegrilles.posteur/
 COPY node_modules/millegrilles.coupdoeil      $APP_FOLDER/node_modules/millegrilles.coupdoeil/
 COPY node_modules/millegrilles.maitrecomptes  $APP_FOLDER/node_modules/millegrilles.maitrecomptes/

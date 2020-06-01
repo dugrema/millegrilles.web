@@ -1,0 +1,23 @@
+# Chargement de /coupdoeil via dev React
+location /coupdoeil {
+  proxy_pass https://mg-dev4.maple.maceroc.com:3000;
+  include /etc/nginx/conf.d/component_base.include;
+}
+
+# Chargement de /posteur via dev React
+location /posteur {
+  proxy_pass https://mg-dev4.maple.maceroc.com:3000;
+  include /etc/nginx/conf.d/component_base.include;
+}
+
+# Site de test
+location /prive {
+ include           /etc/nginx/conf.d/auth.include;
+ include           /etc/nginx/conf.d/modules/proxypass.include;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+
+ proxy_set_header  Remote-User $auth_user;
+ proxy_set_header  Est-Proprietaire $auth_proprietaire;
+}

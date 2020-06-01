@@ -19,6 +19,8 @@ build_app() {
   cp -r $REP_SRC/* $REP_TMP
   cp -r $REP_SRC/.env $REP_TMP
 
+  makeManifest $REP_TMP
+
   echo "Installer toutes les dependances"
   cd $REP_TMP
   npm i
@@ -42,6 +44,12 @@ build_react() {
   REP_COUPDOEIL_TMP="$REP_COURANT/tmp/coupdoeil"
   REP_COUPDOEIL_STATIC="$REP_STATIC_GLOBAL/coupdoeil/"
   build_app $REP_COUPDOEIL_SRC $REP_COUPDOEIL_TMP $REP_COUPDOEIL_STATIC
+
+  echo "Build Posteur (/posteur)"
+  REP_POSTEUR_SRC="$REP_COURANT/node_modules/millegrilles.posteur/client"
+  REP_POSTEUR_TMP="$REP_COURANT/tmp/posteur"
+  REP_POSTEUR_STATIC="$REP_STATIC_GLOBAL/posteur/"
+  build_app $REP_POSTEUR_SRC $REP_POSTEUR_TMP $REP_POSTEUR_STATIC
 
   tar -zcf ../$BUILD_FILE $REP_STATIC_GLOBAL
 }
@@ -81,13 +89,34 @@ traiter_fichier_react() {
   fi
 }
 
+makeManifest() {
+  PATH_APP=$1
+  PATH_MANIFEST=$PATH_APP/src/manifest.build.js
+
+  VERSION=`${REP_COURANT}/read_version.py $PATH_APP/package.json`
+  DATECOURANTE=`date "+%Y-%m-%d %H:%M"`
+
+  echo "const build = {" > $PATH_MANIFEST
+  echo "  date: '$DATECOURANTE'," >> $PATH_MANIFEST
+  echo "  version: '$VERSION'" >> $PATH_MANIFEST
+  echo "}" >> $PATH_MANIFEST
+  echo "module.exports = build;" >> $PATH_MANIFEST
+
+  echo "Manifest $PATH_MANIFEST"
+  cat $PATH_MANIFEST
+
+}
+
 REP_COURANT=`pwd`
 REP_STATIC_GLOBAL=${REP_COURANT}/static
 BUILD_FILE="${NAME}.${VERSION}.tar.gz"
 BUILD_PATH=/home/mathieu/git/millegrilles.web/millegrilles_web/tmp
 
 echo "S'assurer que toutes les dependances sont presentes"
-rm -rf $REP_STATIC_GLOBAL node_modules/millegrilles.coupdoeil node_modules/millegrilles.maitrecomptes
+rm -rf $REP_STATIC_GLOBAL \
+  node_modules/millegrilles.coupdoeil \
+  node_modules/millegrilles.maitrecomptes \
+  node_modules/millegrilles.posteur
 npm i --production
 
 traiter_fichier_react
