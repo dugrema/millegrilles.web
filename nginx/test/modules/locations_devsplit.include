@@ -31,7 +31,7 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
 }
 location /coupdoeil {
   proxy_pass https://mg-dev4.maple.maceroc.com:3003;
-  include /etc/nginx/conf.d/component_base.include;
+  include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Chargement de /posteur via dev React
@@ -55,6 +55,27 @@ location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
 }
 location /posteur {
   proxy_pass https://mg-dev4.maple.maceroc.com:3005;
+  include /etc/nginx/conf.d/component_base_auth.include;
+}
+
+# Chargement de /vitrine via dev React
+# /vitrine
+# /vitrine/sock-js.node
+# /vitrine/main.*
+# /vitrine/static/*
+location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*)) {
+ proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
+}
+location /vitrine {
+  proxy_pass https://mg-dev4.maple.maceroc.com:3007;
   include /etc/nginx/conf.d/component_base.include;
 }
 
