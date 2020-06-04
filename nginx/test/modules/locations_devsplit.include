@@ -63,7 +63,7 @@ location /posteur {
 # /vitrine/sock-js.node
 # /vitrine/main.*
 # /vitrine/static/*
-location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*)) {
+location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
  proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -73,6 +73,9 @@ location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*)) {
  proxy_set_header  Upgrade $http_upgrade;
  proxy_set_header  Connection $connection_upgrade;
  proxy_set_header  Host $host;
+}
+location /vitrine/data {
+  alias /var/opt/millegrilles/2DE28fU9miADsNV9MdgV26NZ76CLZMrcM9hrCoD/nginx/data;
 }
 location /vitrine {
   proxy_pass https://mg-dev4.maple.maceroc.com:3007;
