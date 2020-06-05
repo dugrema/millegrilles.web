@@ -8,8 +8,4 @@ VOLUME /etc/nginx/conf.d /etc/nginx/conf.d/modules /usr/share/nginx/html
 
 COPY res/*.* /etc/nginx/conf.d
 
-# RUN chmod 755 /res/scripts/* && /res/scripts/setup.sh
-
 WORKDIR $APP_BUNDLE_DIR
-
-# CMD ["/opt/nginx/dist/run.sh"]

@@ -1,6 +1,6 @@
 # Configuration du certificat/cle SSL
-ssl_certificate       /certs/2DE28fU9miAD.pki.coupdoeil.cert.20200531123213;
-ssl_certificate_key   /certs/2DE28fU9miAD.pki.coupdoeil.key.20200531123213;
+ssl_certificate       /certs/37DRyLk3Mog6.pki.web_protege.cert.20200605144620;
+ssl_certificate_key   /certs/37DRyLk3Mog6.pki.web_protege.key.20200605144620;
 
 # OCSP stapling
 ssl_stapling          off;

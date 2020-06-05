@@ -1,11 +1,21 @@
-# Liste d'applications proteges
+# Liste d'applications
 
+# Niveau de securite protege
 location /coupdoeil {
-  proxy_pass https://web:443;
+  include /etc/nginx.conf.d/component/proxypass.include;
   include /etc/nginx/conf.d/component_base.include;
 }
 
 location /posteur {
-  proxy_pass https://web:443;
+  include /etc/nginx.conf.d/component/proxypass.include;
+  include /etc/nginx/conf.d/component_base.include;
+}
+
+# Niveau de securite prive
+
+
+# Niveau de securite public
+location /vitrine {
+  include /etc/nginx.conf.d/component/proxypass.include;
   include /etc/nginx/conf.d/component_base.include;
 }
