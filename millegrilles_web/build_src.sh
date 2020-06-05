@@ -51,6 +51,12 @@ build_react() {
   REP_POSTEUR_STATIC="$REP_STATIC_GLOBAL/posteur/"
   build_app $REP_POSTEUR_SRC $REP_POSTEUR_TMP $REP_POSTEUR_STATIC
 
+  echo "Build Posteur (/vitrine)"
+  REP_VITRINE_SRC="$REP_COURANT/node_modules/millegrilles.vitrine/client"
+  REP_VITRINE_TMP="$REP_COURANT/tmp/vitrine"
+  REP_VITRINE_STATIC="$REP_STATIC_GLOBAL/vitrine/"
+  build_app $REP_VITRINE_SRC $REP_VITRINE_TMP $REP_VITRINE_STATIC
+
   tar -zcf ../$BUILD_FILE $REP_STATIC_GLOBAL
 }
 

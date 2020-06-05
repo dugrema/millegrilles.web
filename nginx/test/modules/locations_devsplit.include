@@ -16,7 +16,8 @@ set $upstream_react_vitrine       https://mg-dev4.maple.maceroc.com:3008;
 # /millegrilles/main.*
 # /millegrilles/static/*
 location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
- proxy_pass        $upstream_react_millegrilles;
+ # proxy_pass        $upstream_react_millegrilles;
+ proxy_pass        https://mg-dev4.maple.maceroc.com:3002;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
@@ -31,7 +32,8 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
   # Protection via auth plugin
   include /etc/nginx/conf.d/auth.include;
 
-  proxy_pass        $upstream_react_coupdoeil;
+  # proxy_pass        $upstream_react_coupdoeil;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3004;
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
@@ -42,7 +44,8 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
   proxy_set_header  Host $host;
 }
 location /coupdoeil {
-  proxy_pass $upstream_node_coupdoeil;
+  # proxy_pass $upstream_node_coupdoeil;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3003;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
@@ -55,7 +58,8 @@ location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
  # Protection via auth plugin
  include /etc/nginx/conf.d/auth.include;
 
- proxy_pass        $upstream_react_posteur;
+ # proxy_pass        $upstream_react_posteur;
+ proxy_pass        https://mg-dev4.maple.maceroc.com:3006;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
@@ -66,7 +70,8 @@ location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
  proxy_set_header  Host $host;
 }
 location /posteur {
-  proxy_pass $upstream_node_posteur;
+  # proxy_pass $upstream_node_posteur;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3005;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
@@ -76,7 +81,8 @@ location /posteur {
 # /vitrine/main.*
 # /vitrine/static/*
 location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- proxy_pass        $upstream_react_vitrine;
+ # proxy_pass        $upstream_react_vitrine;
+ proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
@@ -90,7 +96,8 @@ location /vitrine/data {
   alias /var/opt/millegrilles/37DRyLk3Mog63vW2uqQnPT9jfCUSqKWqRmjUHsu/mounts/nginx/data;
 }
 location /vitrine {
-  proxy_pass $upstream_node_vitrine;
+  # proxy_pass $upstream_node_vitrine;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
   include /etc/nginx/conf.d/component_base.include;
 }
 

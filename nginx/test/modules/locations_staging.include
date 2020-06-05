@@ -10,6 +10,12 @@ location /posteur {
   include /etc/nginx/conf.d/component_base.include;
 }
 
+# Chargement de /posteur via dev React
+location /vitrine {
+  proxy_pass https://mg-dev4.maple.maceroc.com:3000;
+  include /etc/nginx/conf.d/component_base.include;
+}
+
 # Site de test
 location /prive {
  include           /etc/nginx/conf.d/auth.include;

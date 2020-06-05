@@ -12,9 +12,9 @@ server {
     # Max upload https protege
     client_max_body_size 50M;
 
-    # Redirection permanente de / vers /millegrilles
+    # Redirection permanente de / vers /vitrine
     location = / {
-      return 301 https://$http_host/millegrilles;
+      return 301 https://$http_host/vitrine;
     }
 
     # Composant authentification /millegrilles

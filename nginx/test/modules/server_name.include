@@ -1,4 +1,5 @@
 # Inserer les noms du serveur prive
 
 # Exemple :
+# resolver 127.0.1.1 valid=30s;
 server_name mg-dev4.maple.maceroc.com mg-dev4;

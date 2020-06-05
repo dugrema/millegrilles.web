@@ -21,6 +21,7 @@
     "millegrilles.maitrecomptes": "git+ssh://git.maceroc.com/git/millegrilles.maitrecomptes.git#1.27",
     "millegrilles.coupdoeil": "git+ssh://git.maceroc.com/git/millegrilles.coupdoeil.git#1.27",
     "millegrilles.posteur": "git+ssh://git.maceroc.com/git/millegrilles.posteur.git#1.27",
+    "millegrilles.vitrine": "git+ssh://git.maceroc.com/git/millegrilles.vitrine.git#1.27",
     "express": "^4.17.1"
   },
   "devDependencies": {

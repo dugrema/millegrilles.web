@@ -8,6 +8,7 @@ const {initialiser: initialiserServer} = require('millegrilles.common/lib/server
 const {initialiser: initialiserCoupdoeil} = require('millegrilles.coupdoeil')
 const {initialiser: initialiserMillegrilles} = require('millegrilles.maitrecomptes')
 const {initialiser: initialiserPosteur} = require('millegrilles.posteur')
+const {initialiser: initialiserVitrine} = require('millegrilles.vitrine')
 
 async function init() {
 
@@ -31,11 +32,12 @@ async function init() {
   const millegrilles = await initialiserMillegrilles(fctRabbitMQParIdmg, {idmg})
   const coupdoeil = await initialiserCoupdoeil(fctRabbitMQParIdmg, {idmg})
   const posteur = await initialiserPosteur(fctRabbitMQParIdmg, {idmg})
+  const vitrine = await initialiserVitrine(fctRabbitMQParIdmg, {idmg})
 
   const root = express()
   root.use(injecterAmqpdao)
 
-  const mappingApps = {coupdoeil, millegrilles, posteur}
+  const mappingApps = {coupdoeil, millegrilles, posteur, vitrine}
   const serverInstance = initialiserServer(root, mappingApps)
 
 }

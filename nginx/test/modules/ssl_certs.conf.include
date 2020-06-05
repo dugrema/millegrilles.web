@@ -1,6 +1,6 @@
 # Configuration du certificat/cle SSL
-ssl_certificate       /certs/37DRyLk3Mog6.pki.web_protege.cert.20200605144620;
-ssl_certificate_key   /certs/37DRyLk3Mog6.pki.web_protege.key.20200605144620;
+ssl_certificate       /certs/UvZKeDzNdk6U.pki.web_protege.cert.20200605182056;
+ssl_certificate_key   /certs/UvZKeDzNdk6U.pki.web_protege.key.20200605182056;
 
 # OCSP stapling
 ssl_stapling          off;

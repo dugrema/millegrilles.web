@@ -1,4 +1,6 @@
 # set $upstream https://mg-dev4.maple.maceroc.com:3000;
-set $upstream https://mg-dev4.maple.maceroc.com:3001;
+# set $upstream https://mg-dev4.maple.maceroc.com:3001;
 
-proxy_pass $upstream;
+# proxy_pass $upstream;
+proxy_pass https://mg-dev4.maple.maceroc.com:3000;
+# proxy_pass https://mg-dev4.maple.maceroc.com:3001;
