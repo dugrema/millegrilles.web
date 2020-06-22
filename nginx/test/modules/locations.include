@@ -1,4 +1,4 @@
 # Fontions de l'API d'authentification - DEV ONLY (inclus sous /millegrilles en prod)
 
-# include /etc/nginx/conf.d/modules/locations_devsplit.include;
-include /etc/nginx/conf.d/modules/locations_staging.include;
+include /etc/nginx/conf.d/modules/locations_devsplit.include;
+# include /etc/nginx/conf.d/modules/locations_staging.include;

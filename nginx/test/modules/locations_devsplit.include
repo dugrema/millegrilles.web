@@ -10,6 +10,9 @@ set $upstream_react_posteur       https://mg-dev4.maple.maceroc.com:3006;
 set $upstream_node_vitrine        https://mg-dev4.maple.maceroc.com:3007;
 set $upstream_react_vitrine       https://mg-dev4.maple.maceroc.com:3008;
 
+set $upstream_node_messagerie     https://mg-dev4.maple.maceroc.com:3009;
+set $upstream_react_messagerie    https://mg-dev4.maple.maceroc.com:3010;
+
 # Chargement de l'application dev React /millegrilles
 # /millegrilles
 # /millegrilles/sock-js.node
@@ -98,6 +101,29 @@ location /vitrine/data {
 location /vitrine {
   # proxy_pass $upstream_node_vitrine;
   proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
+  include /etc/nginx/conf.d/component_base.include;
+}
+
+# Chargement de /messagerie via dev React
+# /messagerie
+# /messagerie/sock-js.node
+# /messagerie/main.*
+# /messagerie/static/*
+location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+ # proxy_pass        $upstream_react_messagerie;
+ proxy_pass        https://mg-dev4.maple.maceroc.com:3010;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
+}
+location /messagerie {
+  # proxy_pass $upstream_node_messagerie;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3009;
   include /etc/nginx/conf.d/component_base.include;
 }
 
