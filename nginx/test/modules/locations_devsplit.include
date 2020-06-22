@@ -18,91 +18,91 @@ set $upstream_react_messagerie    https://mg-dev4.maple.maceroc.com:3010;
 # /millegrilles/sock-js.node
 # /millegrilles/main.*
 # /millegrilles/static/*
-location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
- # proxy_pass        $upstream_react_millegrilles;
- proxy_pass        https://mg-dev4.maple.maceroc.com:3002;
- proxy_set_header  X-Real-IP $remote_addr;
- proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_set_header  X-Forwarded-Proto $scheme;
-}
+#location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
+# # proxy_pass        $upstream_react_millegrilles;
+# proxy_pass        https://mg-dev4.maple.maceroc.com:3002;
+# proxy_set_header  X-Real-IP $remote_addr;
+# proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+# proxy_set_header  X-Forwarded-Proto $scheme;
+#}
 
 # Chargement de /coupdoeil via dev React
 # /coupdoeil
 # /coupdoeil/sock-js.node
 # /coupdoeil/main.*
 # /coupdoeil/static/*
-location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
-  # Protection via auth plugin
-  include /etc/nginx/conf.d/auth.include;
-
-  # proxy_pass        $upstream_react_coupdoeil;
-  proxy_pass        https://mg-dev4.maple.maceroc.com:3004;
-  proxy_set_header  X-Real-IP $remote_addr;
-  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header  X-Forwarded-Proto $scheme;
-
-  # Support WSS
-  proxy_set_header  Upgrade $http_upgrade;
-  proxy_set_header  Connection $connection_upgrade;
-  proxy_set_header  Host $host;
-}
-location /coupdoeil {
-  # proxy_pass $upstream_node_coupdoeil;
-  proxy_pass        https://mg-dev4.maple.maceroc.com:3003;
-  include /etc/nginx/conf.d/component_base_auth.include;
-}
+#location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
+#  # Protection via auth plugin
+#  include /etc/nginx/conf.d/auth.include;
+#
+#  # proxy_pass        $upstream_react_coupdoeil;
+#  proxy_pass        https://mg-dev4.maple.maceroc.com:3004;
+#  proxy_set_header  X-Real-IP $remote_addr;
+#  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+#  proxy_set_header  X-Forwarded-Proto $scheme;
+#
+#  # Support WSS
+#  proxy_set_header  Upgrade $http_upgrade;
+#  proxy_set_header  Connection $connection_upgrade;
+#  proxy_set_header  Host $host;
+#}
+#location /coupdoeil {
+#  # proxy_pass $upstream_node_coupdoeil;
+#  proxy_pass        https://mg-dev4.maple.maceroc.com:3003;
+#  include /etc/nginx/conf.d/component_base_auth.include;
+#}
 
 # Chargement de /posteur via dev React
 # /posteur
 # /posteur/sock-js.node
 # /posteur/main.*
 # /posteur/static/*
-location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
- # Protection via auth plugin
- include /etc/nginx/conf.d/auth.include;
-
- # proxy_pass        $upstream_react_posteur;
- proxy_pass        https://mg-dev4.maple.maceroc.com:3006;
- proxy_set_header  X-Real-IP $remote_addr;
- proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- proxy_set_header  Upgrade $http_upgrade;
- proxy_set_header  Connection $connection_upgrade;
- proxy_set_header  Host $host;
-}
-location /posteur {
-  # proxy_pass $upstream_node_posteur;
-  proxy_pass        https://mg-dev4.maple.maceroc.com:3005;
-  include /etc/nginx/conf.d/component_base_auth.include;
-}
+#location ~ (^/posteur$|^/posteur/(sockjs-node|static|main\..*)) {
+# # Protection via auth plugin
+# include /etc/nginx/conf.d/auth.include;
+#
+# # proxy_pass        $upstream_react_posteur;
+# proxy_pass        https://mg-dev4.maple.maceroc.com:3006;
+# proxy_set_header  X-Real-IP $remote_addr;
+# proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+# proxy_set_header  X-Forwarded-Proto $scheme;
+#
+# # Support WSS
+# proxy_set_header  Upgrade $http_upgrade;
+# proxy_set_header  Connection $connection_upgrade;
+# proxy_set_header  Host $host;
+#}
+#location /posteur {
+#  # proxy_pass $upstream_node_posteur;
+#  proxy_pass        https://mg-dev4.maple.maceroc.com:3005;
+#  include /etc/nginx/conf.d/component_base_auth.include;
+#}
 
 # Chargement de /vitrine via dev React
 # /vitrine
 # /vitrine/sock-js.node
 # /vitrine/main.*
 # /vitrine/static/*
-location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- # proxy_pass        $upstream_react_vitrine;
- proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
- proxy_set_header  X-Real-IP $remote_addr;
- proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- proxy_set_header  Upgrade $http_upgrade;
- proxy_set_header  Connection $connection_upgrade;
- proxy_set_header  Host $host;
-}
-location /vitrine/data {
-  alias /var/opt/millegrilles/37DRyLk3Mog63vW2uqQnPT9jfCUSqKWqRmjUHsu/mounts/nginx/data;
-}
-location /vitrine {
-  # proxy_pass $upstream_node_vitrine;
-  proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
-  include /etc/nginx/conf.d/component_base.include;
-}
+#location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+# # proxy_pass        $upstream_react_vitrine;
+# proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
+# proxy_set_header  X-Real-IP $remote_addr;
+# proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+# proxy_set_header  X-Forwarded-Proto $scheme;
+#
+# # Support WSS
+# proxy_set_header  Upgrade $http_upgrade;
+# proxy_set_header  Connection $connection_upgrade;
+# proxy_set_header  Host $host;
+#}
+#location /vitrine/data {
+#  alias /var/opt/millegrilles/37DRyLk3Mog63vW2uqQnPT9jfCUSqKWqRmjUHsu/mounts/nginx/data;
+#}
+#location /vitrine {
+#  # proxy_pass $upstream_node_vitrine;
+#  proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
+#  include /etc/nginx/conf.d/component_base.include;
+#}
 
 # Chargement de /messagerie via dev React
 # /messagerie
@@ -124,7 +124,7 @@ location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-upda
 location /messagerie {
   # proxy_pass $upstream_node_messagerie;
   proxy_pass        https://mg-dev4.maple.maceroc.com:3009;
-  include /etc/nginx/conf.d/component_base.include;
+  include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Site de test
@@ -135,6 +135,6 @@ location /prive {
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
 
- proxy_set_header  Remote-User $auth_user;
+ proxy_set_header  Remote-User $auth_user_prive;
  proxy_set_header  Est-Proprietaire $auth_proprietaire;
 }
