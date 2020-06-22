@@ -3,7 +3,7 @@
 source image_info.txt
 
 # Override version (e.g. pour utiliser x86_64_...)
-VERSION=x86_64_1.27.0
+VERSION=x86_64_1.28.1
 IMAGE_DOCKER=$REPO/$NAME:$VERSION
 
 echo Image docker : $IMAGE_DOCKER
