@@ -18,13 +18,12 @@ set $upstream_react_messagerie    https://mg-dev4.maple.maceroc.com:3010;
 # /millegrilles/sock-js.node
 # /millegrilles/main.*
 # /millegrilles/static/*
-#location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
-# # proxy_pass        $upstream_react_millegrilles;
-# proxy_pass        https://mg-dev4.maple.maceroc.com:3002;
-# proxy_set_header  X-Real-IP $remote_addr;
-# proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-# proxy_set_header  X-Forwarded-Proto $scheme;
-#}
+location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
+ proxy_pass        http://mg-dev4.maple.maceroc.com:3002;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+}
 
 # Chargement de /coupdoeil via dev React
 # /coupdoeil
