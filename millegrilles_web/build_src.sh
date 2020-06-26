@@ -3,8 +3,6 @@ set -e
 
 source image_info.txt
 
-rm -rf node_modules/ static/ tmp/ package-lock.json
-
 echo "Nom build : $NAME"
 
 build_app() {
@@ -128,9 +126,14 @@ BUILD_PATH=/home/mathieu/git/millegrilles.web/millegrilles_web/tmp
 
 echo "S'assurer que toutes les dependances sont presentes"
 rm -rf $REP_STATIC_GLOBAL \
+  package-lock.json \
+  static/ \
+  tmp/ \
   node_modules/millegrilles.coupdoeil \
   node_modules/millegrilles.maitrecomptes \
-  node_modules/millegrilles.posteur
+  node_modules/millegrilles.posteur \
+  node_modules/millegrilles.messagerie
+
 npm i --production
 
 traiter_fichier_react
