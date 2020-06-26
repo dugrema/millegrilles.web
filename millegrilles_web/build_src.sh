@@ -126,7 +126,6 @@ BUILD_PATH=/home/mathieu/git/millegrilles.web/millegrilles_web/tmp
 
 echo "S'assurer que toutes les dependances sont presentes"
 rm -rf $REP_STATIC_GLOBAL \
-  package-lock.json \
   static/ \
   tmp/ \
   node_modules/millegrilles.coupdoeil \
