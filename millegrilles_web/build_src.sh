@@ -3,6 +3,8 @@ set -e
 
 source image_info.txt
 
+rm -rf node_modules/ static/ tmp/ package-lock.json
+
 echo "Nom build : $NAME"
 
 build_app() {
@@ -51,7 +53,13 @@ build_react() {
   REP_POSTEUR_STATIC="$REP_STATIC_GLOBAL/posteur/"
   build_app $REP_POSTEUR_SRC $REP_POSTEUR_TMP $REP_POSTEUR_STATIC
 
-  echo "Build Posteur (/vitrine)"
+  echo "Build Messagerie (/messagerie)"
+  REP_MESSAGERIE_SRC="$REP_COURANT/node_modules/millegrilles.messagerie/client"
+  REP_MESSAGERIE_TMP="$REP_COURANT/tmp/messagerie"
+  REP_MESSAGERIE_STATIC="$REP_STATIC_GLOBAL/messagerie/"
+  build_app $REP_MESSAGERIE_SRC $REP_MESSAGERIE_TMP $REP_MESSAGERIE_STATIC
+
+  echo "Build Vitrine (/vitrine)"
   REP_VITRINE_SRC="$REP_COURANT/node_modules/millegrilles.vitrine/client"
   REP_VITRINE_TMP="$REP_COURANT/tmp/vitrine"
   REP_VITRINE_STATIC="$REP_STATIC_GLOBAL/vitrine/"
@@ -68,7 +76,7 @@ telecharger_static() {
     exit 1
   fi
 
-  echo "Installation de l'application coupdoeil React dans $REP_STATIC_GLOBAL"
+  echo "Installation de l'application React dans $REP_STATIC_GLOBAL"
   rm -rf $REP_STATIC_GLOBAL
   mkdir $REP_STATIC_GLOBAL && \
     tar -xf $BUILD_FILE -C $REP_STATIC_GLOBAL
