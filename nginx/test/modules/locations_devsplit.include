@@ -112,7 +112,7 @@ set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 # /messagerie/static/*
 location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
  # proxy_pass        $upstream_react_messagerie;
- proxy_pass        https://mg-dev4.maple.maceroc.com:3010;
+ proxy_pass        https://localhost:3010;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
@@ -124,7 +124,7 @@ location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-upda
 }
 location /messagerie {
   # proxy_pass $upstream_node_messagerie;
-  proxy_pass        https://mg-dev4.maple.maceroc.com:3009;
+  proxy_pass        https://localhost:3009;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
