@@ -10,6 +10,7 @@ proxy_set_header  Host        $host;
 # Header auth pour s'assurer que le compte est celui du proprietaire de la MilleGrille
 proxy_set_header  Est-Proprietaire  $auth_proprietaire;
 proxy_set_header  User-Prive        $auth_user_prive;
+proxy_set_header  USER              $auth_user_prive;
 proxy_set_header  Idmg-Serveur      $auth_idmg_serveur;
 proxy_set_header  Idmg-Compte       $auth_idmg_compte;
 proxy_set_header  Idmgs-Actifs      $auth_idmgs_actifs;

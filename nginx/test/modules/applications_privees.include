@@ -23,11 +23,40 @@ server {
       proxy_set_header  X-Forwarded-Proto $scheme;
     }
 
+    # Forcer le logout a retourner vers la page d'accueil privee
+    location /logout {
+      return 301 https://mg-dev4.maple.maceroc.com/millegrilles;
+    }
+
     location / {
       proxy_pass        http://mg-dev4.maple.maceroc.com:3011;
 
       # Protection via auth plugin
       include /etc/nginx/conf.d/component_base_auth.include;
+    }
+
+}
+
+server {
+    listen 8080 default_server;
+    listen [::]:8080 default_server ipv6only=on;
+
+    include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
+    include /etc/nginx/conf.d/ssl_params.conf.include;
+
+    # Max upload https protege
+    client_max_body_size 50M;
+
+    # Verification de l'authentification
+    # Invoque pour **chaque** appel a nginx sous une page prive/protegee
+    location /millegrilles/openid {
+      include /etc/nginx/conf.d/modules/proxypass.include;
+      proxy_pass_request_body off; # no need to send the POST body
+
+      proxy_set_header  Content-Length "";
+      proxy_set_header  X-Real-IP $remote_addr;
+      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header  X-Forwarded-Proto $scheme;
     }
 
 }

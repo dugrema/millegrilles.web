@@ -19,31 +19,14 @@ location = /millegrilles/authentification/verifier {
 
 # API millegrilles, proteger via auth plugin
 location /millegrilles/api {
-
-  # Protection via auth plugin
-  include /etc/nginx/conf.d/auth.include;
-
   include /etc/nginx/conf.d/modules/proxypass.include;
-  proxy_set_header  X-Real-IP $remote_addr;
-  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header  X-Forwarded-Proto $scheme;
+  include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Support socket.io, proteger via auth plugin
 location /millegrilles/socket.io {
-
-  # Protection via auth plugin
-  include /etc/nginx/conf.d/auth.include;
-
   include /etc/nginx/conf.d/modules/proxypass.include;
-  proxy_set_header  X-Real-IP $remote_addr;
-  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header  X-Forwarded-Proto $scheme;
-
-  # Support WSS
-  proxy_set_header  Upgrade $http_upgrade;
-  proxy_set_header  Connection $connection_upgrade;
-  proxy_set_header  Host $host;
+  include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Application React - s'occupe de l'authentification (non protege)
