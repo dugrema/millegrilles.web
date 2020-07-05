@@ -1,9 +1,45 @@
 # HTTPS server
 # Serveur https par defaut
 server {
+  listen [::]:443 ssl http2;
+
+  server_name redmine.mg-dev4.maple.maceroc.com;
+
+  include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
+  include /etc/nginx/conf.d/ssl_params.conf.include;
+
+  # Max upload https
+  client_max_body_size 50M;
+
+  error_page 401 = @error401;
+
+  # If the user is not logged in, redirect them to the login URL
+  location @error401 {
+    return 307 https://mg-dev4.maple.maceroc.com/millegrilles;
+  }
+
+  # Verification de l'authentification
+  # Invoque pour **chaque** appel a nginx sous une page prive/protegee
+  location = /millegrilles/authentification/verifier {
+    include /etc/nginx/conf.d/modules/proxypass.include;
+    proxy_pass_request_body off; # no need to send the POST body
+
+    proxy_set_header  Content-Length "";
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Proto $scheme;
+  }
+
+  location / {
+    proxy_pass http://localhost:3011;
+    include /etc/nginx/conf.d/component_base_auth.include;
+  }
+}
+
+server {
     listen [::]:443 ssl http2;
 
-    server_name redmine.mg-dev4.maple.maceroc.com;
+    server_name blynk.mg-dev4.maple.maceroc.com;
 
     include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
     include /etc/nginx/conf.d/ssl_params.conf.include;
@@ -23,23 +59,19 @@ server {
       proxy_set_header  X-Forwarded-Proto $scheme;
     }
 
-    # Forcer le logout a retourner vers la page d'accueil privee
-    location /logout {
-      return 301 https://mg-dev4.maple.maceroc.com/millegrilles;
-    }
-
     location / {
-      proxy_pass        http://mg-dev4.maple.maceroc.com:3011;
+      proxy_pass        https://mg-dev4.maple.maceroc.com:9443;
 
       # Protection via auth plugin
-      include /etc/nginx/conf.d/component_base_auth.include;
+      #include /etc/nginx/conf.d/component_base_auth.include;
+      include /etc/nginx/conf.d/component_base.include;
     }
 
 }
 
 server {
-    listen 8080 default_server;
-    listen [::]:8080 default_server ipv6only=on;
+    listen 8081 default_server;
+    listen [::]:8081 default_server ipv6only=on;
 
     include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
     include /etc/nginx/conf.d/ssl_params.conf.include;

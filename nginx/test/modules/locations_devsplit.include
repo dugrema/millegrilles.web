@@ -20,38 +20,56 @@ set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 # /millegrilles/sock-js.node
 # /millegrilles/main.*
 # /millegrilles/static/*
-#location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
-# proxy_pass        http://mg-dev4.maple.maceroc.com:3002;
-# proxy_set_header  X-Real-IP $remote_addr;
-# proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-# proxy_set_header  X-Forwarded-Proto $scheme;
-#}
+location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
+ proxy_pass        https://localhost:3002;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
+}
+location /millegrilles/socket.io/ {
+ proxy_pass        https://localhost:3001;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
+
+ include /etc/nginx/conf.d/auth.include;
+}
 
 # Chargement de /coupdoeil via dev React
 # /coupdoeil
 # /coupdoeil/sock-js.node
 # /coupdoeil/main.*
 # /coupdoeil/static/*
-#location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
-#  # Protection via auth plugin
-#  include /etc/nginx/conf.d/auth.include;
-#
-#  # proxy_pass        $upstream_react_coupdoeil;
-#  proxy_pass        https://mg-dev4.maple.maceroc.com:3004;
-#  proxy_set_header  X-Real-IP $remote_addr;
-#  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-#  proxy_set_header  X-Forwarded-Proto $scheme;
-#
-#  # Support WSS
-#  proxy_set_header  Upgrade $http_upgrade;
-#  proxy_set_header  Connection $connection_upgrade;
-#  proxy_set_header  Host $host;
-#}
-#location /coupdoeil {
-#  # proxy_pass $upstream_node_coupdoeil;
-#  proxy_pass        https://mg-dev4.maple.maceroc.com:3003;
-#  include /etc/nginx/conf.d/component_base_auth.include;
-#}
+location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
+  # Protection via auth plugin
+  include /etc/nginx/conf.d/auth.include;
+
+  # proxy_pass        $upstream_react_coupdoeil;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3004;
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+
+  # Support WSS
+  proxy_set_header  Upgrade $http_upgrade;
+  proxy_set_header  Connection $connection_upgrade;
+  proxy_set_header  Host $host;
+}
+location /coupdoeil {
+  # proxy_pass $upstream_node_coupdoeil;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3003;
+  include /etc/nginx/conf.d/component_base_auth.include;
+}
 
 # Chargement de /posteur via dev React
 # /posteur

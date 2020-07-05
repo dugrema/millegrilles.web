@@ -1,6 +1,9 @@
 # Configuration du certificat/cle SSL
-ssl_certificate       /certs/pki.web_protege.cert;
-ssl_certificate_key   /certs/pki.web_protege.key;
+#ssl_certificate       /certs/pki.web_protege.cert;
+#ssl_certificate_key   /certs/pki.web_protege.key;
+
+ssl_certificate       /certs/acme/mg-dev4.maple.maceroc.com.fullchain;
+ssl_certificate_key   /certs/acme/mg-dev4.maple.maceroc.com.key;
 
 # OCSP stapling
 ssl_stapling          off;
