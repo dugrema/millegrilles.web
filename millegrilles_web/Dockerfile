@@ -1,4 +1,4 @@
-FROM docker.maceroc.com/millegrilles_web_base:1.29.1
+FROM docker.maceroc.com/millegrilles_web_base:1.30.0
 
 ENV MG_CONSIGNATION_HTTP=https://consignationfichiers \
     APP_FOLDER=/usr/src/app \
