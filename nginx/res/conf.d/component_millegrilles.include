@@ -1,9 +1,4 @@
-error_page 401 = @error401;
-
-# If the user is not logged in, redirect them to the login URL
-location @error401 {
-  return 307 https://$http_host/millegrilles?url=https://$http_host$request_uri;
-}
+include /etc/nginx/conf.d/modules/error_page.conf.include;
 
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
