@@ -12,11 +12,6 @@ server {
     # Max upload https protege
     client_max_body_size 50M;
 
-    # Redirection / vers /vitrine
-    location = / {
-      return 302 https://$http_host/vitrine;
-    }
-
     # Composant authentification /millegrilles
     include /etc/nginx/conf.d/component_millegrilles.include;
 

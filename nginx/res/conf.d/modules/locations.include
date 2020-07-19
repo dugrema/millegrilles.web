@@ -1,5 +1,10 @@
 # Liste d'applications
 
+# Redirection / vers /vitrine
+location = / {
+  return 302 https://$http_host/vitrine;
+}
+
 # Niveau de securite protege
 location /coupdoeil {
   include /etc/nginx.conf.d/component/proxypass.include;
