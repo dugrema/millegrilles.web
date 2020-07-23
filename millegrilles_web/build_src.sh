@@ -63,12 +63,6 @@ build_react() {
   REP_VITRINE_STATIC="$REP_STATIC_GLOBAL/vitrine/"
   build_app $REP_VITRINE_SRC $REP_VITRINE_TMP $REP_VITRINE_STATIC
 
-  echo "Build client pour installation (/installation)"
-  REP_INSTALLATION_SRC="$REP_COURANT/node_modules/millegrilles.installation.client"
-  REP_INSTALLATION_TMP="$REP_COURANT/tmp/installation"
-  REP_INSTALLATION_STATIC="$REP_STATIC_GLOBAL/installation/"
-  build_app $REP_INSTALLATION_SRC $REP_INSTALLATION_TMP $REP_INSTALLATION_STATIC
-
   tar -zcf ../$BUILD_FILE $REP_STATIC_GLOBAL
 }
 

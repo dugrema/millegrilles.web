@@ -23,7 +23,6 @@
     "millegrilles.posteur": "git+ssh://git.maceroc.com/git/millegrilles.posteur.git#1.30",
     "millegrilles.vitrine": "git+ssh://git.maceroc.com/git/millegrilles.vitrine.git#1.30",
     "millegrilles.messagerie": "git+ssh://git.maceroc.com/git/millegrilles.messagerie.git#1.30",
-    "millegrilles.installation.client": "git+ssh://git.maceroc.com/git/millegrilles.installation.client.git#1.30",
     "millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.30",
     "express": "^4.17.1"
   },
