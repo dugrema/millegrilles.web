@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'font-awesome/css/font-awesome.min.css'
 
-import Maitrecomptes from './maitrecomptes'
+import Maitrecomptes from './containers/App'
 
 class Test extends React.Component {
 
