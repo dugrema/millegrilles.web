@@ -4,7 +4,7 @@ const debug = require('debug')('millegrilles:web:www')
 const express = require('express')
 
 const amqpdao = require('../models/amqpdao')
-const {initialiser: initialiserServer} = require('millegrilles.common/lib/server')
+const {initialiser: initialiserServer} = require('millegrilles.common/lib/server2')
 const {initialiser: initialiserCoupdoeil} = require('millegrilles.coupdoeil')
 const {initialiser: initialiserMillegrilles} = require('millegrilles.maitrecomptes')
 //const {initialiser: initialiserPosteur} = require('millegrilles.posteur')
@@ -39,7 +39,7 @@ async function init() {
   const root = express()
   root.use(injecterAmqpdao)
 
-  const mappingApps = {coupdoeil, millegrilles}  //, posteur, vitrine, messagerie}
+  const mappingApps = {millegrilles, coupdoeil}  //, posteur, vitrine, messagerie}
   const serverInstance = initialiserServer(root, mappingApps)
 
 }
