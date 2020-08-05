@@ -1,10 +1,11 @@
 #!/bin/bash
 
 source image_info.txt
+ARCH=`uname -m`
 
 # Override version (e.g. pour utiliser x86_64_...)
-VERSION=x86_64_1.29.3
-IMAGE_DOCKER=$REPO/$NAME:$VERSION
+# VERSION=x86_64_1.29.3
+IMAGE_DOCKER=$REPO/${NAME}:${ARCH}_${VERSION}
 
 echo Image docker : $IMAGE_DOCKER
 

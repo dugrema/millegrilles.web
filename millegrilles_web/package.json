@@ -21,8 +21,11 @@
     "axios": "^0.19.2",
     "express": "^4.17.1",
     "millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.31",
+    "millegrilles.maitrecomptes": "git+ssh://git.maceroc.com/git/millegrilles.maitrecomptes.git#1.31",
     "millegrilles.coupdoeil": "git+ssh://git.maceroc.com/git/millegrilles.coupdoeil.git#1.31",
-    "millegrilles.maitrecomptes": "git+ssh://git.maceroc.com/git/millegrilles.maitrecomptes.git#1.31"
+    "millegrilles.posteur": "git+ssh://git.maceroc.com/git/millegrilles.posteur.git#1.30",
+    "millegrilles.vitrine": "git+ssh://git.maceroc.com/git/millegrilles.vitrine.git#1.30",
+    "millegrilles.messagerie": "git+ssh://git.maceroc.com/git/millegrilles.messagerie.git#1.30"
   },
   "devDependencies": {
     "react-scripts": "^3.4.1"

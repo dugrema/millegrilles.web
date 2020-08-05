@@ -1,6 +1,6 @@
-FROM docker.maceroc.com/millegrilles_web_base:1.30.4
+FROM docker.maceroc.com/millegrilles_web_base:x86_64_1.31.0
 
-ENV MG_CONSIGNATION_HTTP=https://consignationfichiers \
+ENV MG_CONSIGNATION_HTTP=https://fichiers \
     APP_FOLDER=/usr/src/app \
     NODE_ENV=production \
     PORT=443 \
@@ -9,13 +9,16 @@ ENV MG_CONSIGNATION_HTTP=https://consignationfichiers \
 EXPOSE 80 443
 
 # Creer repertoire app, copier fichiers
-WORKDIR           $APP_FOLDER
+WORKDIR $APP_FOLDER
 CMD [ "npm", "start" ]
 
-COPY package*     $APP_FOLDER/
-COPY bin          $APP_FOLDER/bin/
-COPY models       $APP_FOLDER/models/
-COPY static       $APP_FOLDER/static/
+COPY . $APP_FOLDER/
+
+#COPY package*     $APP_FOLDER/
+#COPY bin          $APP_FOLDER/bin/
+#COPY models       $APP_FOLDER/models/
+#COPY static       $APP_FOLDER/static/
+#COPY node_modules $APP_FOLDER/node_modules/
 
 # Mettre a jour code dependances MilleGrilles
 #COPY node_modules/millegrilles.common         $APP_FOLDER/node_modules/millegrilles.common/

@@ -6,62 +6,33 @@ source image_info.txt
 echo "Nom build : $NAME"
 
 build_app() {
-  REP_SRC=$1
-  REP_TMP=$2
-  REP_STATIC=$3
+  REP_CLIENT=$1
+  REP_STATIC=$2
 
-  rm -rf $REP_STATIC
+  rm -rf $REP_CLIENT/build $REP_CLIENT/node_modules $REP_CLIENT/package-lock.json
 
-  mkdir -p $REP_TMP
-  mkdir -p $REP_STATIC
-
-  echo "Copier les fichiers client pour faire le build"
-  cp -r $REP_SRC/* $REP_TMP
-  cp -r $REP_SRC/.env $REP_TMP
-
-  makeManifest $REP_TMP
+  makeManifest $REP_CLIENT
 
   echo "Installer toutes les dependances"
-  cd $REP_TMP
+  cd $REP_CLIENT
   npm i
 
   echo "Build React"
   npm run build
 
   echo "Copier le build React vers $REP_STATIC"
+  mkdir -p $REP_STATIC
   cp -r ./build/* $REP_STATIC
 }
 
 build_react() {
-  echo "Build maitre des comptes (/millegrilles)"
-  REP_COMPTES_SRC="$REP_COURANT/node_modules/millegrilles.maitrecomptes/client"
-  REP_COMPTES_TMP="$REP_COURANT/tmp/maitrecomptes"
-  REP_COMPTES_STATIC="$REP_STATIC_GLOBAL/millegrilles/"
-  build_app $REP_COMPTES_SRC $REP_COMPTES_TMP $REP_COMPTES_STATIC
+  echo "Build application React (/millegrilles)"
 
-  echo "Build Coup D'Oeil (/coupdoeil)"
-  REP_COUPDOEIL_SRC="$REP_COURANT/node_modules/millegrilles.coupdoeil/client"
-  REP_COUPDOEIL_TMP="$REP_COURANT/tmp/coupdoeil"
-  REP_COUPDOEIL_STATIC="$REP_STATIC_GLOBAL/coupdoeil/"
-  build_app $REP_COUPDOEIL_SRC $REP_COUPDOEIL_TMP $REP_COUPDOEIL_STATIC
+  mkdir -p $REP_STATIC_GLOBAL
 
-  echo "Build Posteur (/posteur)"
-  REP_POSTEUR_SRC="$REP_COURANT/node_modules/millegrilles.posteur/client"
-  REP_POSTEUR_TMP="$REP_COURANT/tmp/posteur"
-  REP_POSTEUR_STATIC="$REP_STATIC_GLOBAL/posteur/"
-  build_app $REP_POSTEUR_SRC $REP_POSTEUR_TMP $REP_POSTEUR_STATIC
-
-  echo "Build Messagerie (/messagerie)"
-  REP_MESSAGERIE_SRC="$REP_COURANT/node_modules/millegrilles.messagerie/client"
-  REP_MESSAGERIE_TMP="$REP_COURANT/tmp/messagerie"
-  REP_MESSAGERIE_STATIC="$REP_STATIC_GLOBAL/messagerie/"
-  build_app $REP_MESSAGERIE_SRC $REP_MESSAGERIE_TMP $REP_MESSAGERIE_STATIC
-
-  echo "Build Vitrine (/vitrine)"
-  REP_VITRINE_SRC="$REP_COURANT/node_modules/millegrilles.vitrine/client"
-  REP_VITRINE_TMP="$REP_COURANT/tmp/vitrine"
-  REP_VITRINE_STATIC="$REP_STATIC_GLOBAL/vitrine/"
-  build_app $REP_VITRINE_SRC $REP_VITRINE_TMP $REP_VITRINE_STATIC
+  REP_COMPTES_SRC="$REP_COURANT/client"
+  REP_COMPTES_STATIC="$REP_STATIC_GLOBAL/millegrilles"
+  build_app $REP_COMPTES_SRC $REP_COMPTES_STATIC
 
   tar -zcf ../$BUILD_FILE $REP_STATIC_GLOBAL
 }
@@ -122,18 +93,8 @@ makeManifest() {
 REP_COURANT=`pwd`
 REP_STATIC_GLOBAL=${REP_COURANT}/static
 BUILD_FILE="${NAME}.${VERSION}.tar.gz"
-BUILD_PATH=/home/mathieu/git/millegrilles.web/millegrilles_web/tmp
 
-echo "S'assurer que toutes les dependances sont presentes"
-rm -rf $REP_STATIC_GLOBAL \
-  static/ \
-  tmp/ \
-  node_modules/millegrilles.coupdoeil \
-  node_modules/millegrilles.maitrecomptes \
-  node_modules/millegrilles.posteur \
-  node_modules/millegrilles.messagerie \
-  node_modules/millegrilles.installation.client
-
+docker pull node:12
 npm i --production
 
 traiter_fichier_react
