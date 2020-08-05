@@ -2,3 +2,5 @@ static/
 tmp/
 **/node_modules/
 *.tar.gz
+
+client/index.*

@@ -28,7 +28,7 @@ export const MAPPING_DEPENDANCES = [
   {
     nom: "coupdoeil",
     nomFormatte: "Coup D'Oeil",
-    load: async _=>{return (await import('./deps/millegrilles.coupdoeil-client/export.js')).default},
+    load: async _=>{return (await import('./deps/millegrilles.coupdoeil-client/src/export.js')).default},
     securite: "3.protege"
   }
 ]

@@ -17,6 +17,14 @@ build_app() {
   cd $REP_CLIENT
   npm i
 
+  echo "Copier clients vers src/deps"
+  mkdir -p $REP_CLIENT/src/deps
+  cp -r $REP_CLIENT/node_modules/millegrilles.*-client $REP_CLIENT/src/deps
+  cp -r $REP_CLIENT/node_modules/millegrilles.maitrecomptes-client/src/components $REP_CLIENT/src
+  cp -r $REP_CLIENT/node_modules/millegrilles.maitrecomptes-client/src/containers $REP_CLIENT/src
+  cp $REP_CLIENT/node_modules/millegrilles.maitrecomptes-client/src/index.* $REP_CLIENT/src
+  # rm -rf $REP_CLIENT/node_modules/millegrilles.maitrecomptes-client
+
   echo "Build React"
   npm run build
 
@@ -95,6 +103,6 @@ REP_STATIC_GLOBAL=${REP_COURANT}/static
 BUILD_FILE="${NAME}.${VERSION}.tar.gz"
 
 docker pull node:12
-npm i --production
+npm install --production
 
 traiter_fichier_react
