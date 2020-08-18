@@ -1,0 +1,28 @@
+set $upstream_node_coupdoeil      https://mg-dev4.maple.maceroc.com:3003;
+set $upstream_react_coupdoeil     https://mg-dev4.maple.maceroc.com:3004;
+
+# Chargement de /coupdoeil via dev React
+# /coupdoeil
+# /coupdoeil/sock-js.node
+# /coupdoeil/main.*
+# /coupdoeil/static/*
+location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
+  # Protection via auth plugin
+  include /etc/nginx/conf.d/auth.include;
+
+  # proxy_pass        $upstream_react_coupdoeil;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3004;
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+
+  # Support WSS
+  proxy_set_header  Upgrade $http_upgrade;
+  proxy_set_header  Connection $connection_upgrade;
+  proxy_set_header  Host $host;
+}
+location /coupdoeil {
+  # proxy_pass $upstream_node_coupdoeil;
+  proxy_pass        https://mg-dev4.maple.maceroc.com:3003;
+  include /etc/nginx/conf.d/component_base_auth.include;
+}

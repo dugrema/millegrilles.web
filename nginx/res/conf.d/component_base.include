@@ -15,4 +15,9 @@ proxy_set_header  Idmg-Serveur      $auth_idmg_serveur;
 proxy_set_header  Idmg-Compte       $auth_idmg_compte;
 proxy_set_header  Idmgs-Actifs      $auth_idmgs_actifs;
 
+# Transmettre information SSL client si disponible
+proxy_set_header X-Client-Issuer-DN $ssl_client_i_dn;
+proxy_set_header X-Client-Cert-RAW  $ssl_client_raw_cert;
+proxy_set_header DN                 $ssl_client_s_dn;
+
 proxy_read_timeout 86400;

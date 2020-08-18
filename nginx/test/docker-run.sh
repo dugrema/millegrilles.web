@@ -17,6 +17,6 @@ docker run --rm -it \
   --network host \
   -v $CONF_FOLDER:/etc/nginx/conf.d \
   -v $MODS_FOLDER:/etc/nginx/conf.d/modules \
-  -v /home/mathieu/mgdev/certs:/certs \
+  -v acmesh-data:/certs \
   -v $MILLEGRILLES_FOLDER:$MILLEGRILLES_FOLDER \
   $IMAGE_DOCKER
