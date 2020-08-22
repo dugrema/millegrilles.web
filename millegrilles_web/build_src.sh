@@ -46,6 +46,8 @@ build_react() {
 }
 
 telecharger_static() {
+  set -e
+
   DOWNLOAD_PATH="${URL_SERVEUR_DEV}:${BUILD_PATH}/$BUILD_FILE"
   echo "Telecharger le repertoire static : $DOWNLOAD_PATH"
   sftp $DOWNLOAD_PATH
@@ -96,7 +98,6 @@ makeManifest() {
 
   echo "Manifest $PATH_MANIFEST"
   cat $PATH_MANIFEST
-
 }
 
 REP_COURANT=`pwd`
