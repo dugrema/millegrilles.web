@@ -1,4 +1,4 @@
-FROM docker.maceroc.com/millegrilles_web_base:x86_64_1.31.0
+FROM node:12
 
 ENV MG_CONSIGNATION_HTTP=https://fichiers \
     APP_FOLDER=/usr/src/app \
