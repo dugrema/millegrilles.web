@@ -46,8 +46,9 @@ build_react() {
 }
 
 telecharger_static() {
-  echo "Telecharger le repertoire static"
-  sftp ${URL_SERVEUR_DEV}:${BUILD_PATH}/$BUILD_FILE
+  DOWNLOAD_PATH="${URL_SERVEUR_DEV}:${BUILD_PATH}/$BUILD_FILE"
+  echo "Telecharger le repertoire static : $DOWNLOAD_PATH"
+  sftp $DOWNLOAD_PATH
   if [ $? -ne 0 ]; then
     echo "Erreur download fichier react"
     exit 1
