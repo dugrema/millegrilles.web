@@ -29,6 +29,6 @@ export MG_CONSIGNATION_HTTP=https://$HOST:3003
 export DEBUG=millegrilles:*
 export NODE_ENV=dev
 export DEV=1
-export IDMG=JjP8L3xKtE1yAyQGMU5TSNmVjBzxu5wTGpU23CMHbXUT
+export IDMG=JPtGcNcFSkfSdw49YsDpQHKxqTHMitpbPZW17a2JC54T
 
 npm start

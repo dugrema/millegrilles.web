@@ -35,7 +35,7 @@ async function init() {
   const root = express()
   root.use(injecterAmqpdao)
 
-  const mappingApps = {millegrilles, coupdoeil}  //, posteur, vitrine, messagerie}
+  const mappingApps = {millegrilles, coupdoeil, senseurspassifs}  //, posteur, vitrine, messagerie}
   const serverInstance = initialiserServer(root, mappingApps)
 
 }
