@@ -7,9 +7,7 @@ const amqpdao = require('../models/amqpdao')
 const {initialiser: initialiserServer} = require('millegrilles.common/lib/server2')
 const {initialiser: initialiserCoupdoeil} = require('millegrilles.coupdoeil')
 const {initialiser: initialiserMillegrilles} = require('millegrilles.maitrecomptes')
-//const {initialiser: initialiserPosteur} = require('millegrilles.posteur')
-//const {initialiser: initialiserVitrine} = require('millegrilles.vitrine')
-//const {initialiser: initialiserMessagerie} = require('millegrilles.messagerie')
+const {initialiser: initialiserSenseurspassifs} = require('millegrilles.senseurspassifs')
 
 async function init() {
 
@@ -32,9 +30,7 @@ async function init() {
   // Initalier les apps individuelles, mapper dans dict (cle est path relatif)
   const millegrilles = await initialiserMillegrilles(fctRabbitMQParIdmg, {idmg})
   const coupdoeil = await initialiserCoupdoeil(fctRabbitMQParIdmg, {idmg})
-  //const posteur = await initialiserPosteur(fctRabbitMQParIdmg, {idmg})
-  //const vitrine = await initialiserVitrine(fctRabbitMQParIdmg, {idmg})
-  //const messagerie = await initialiserMessagerie(fctRabbitMQParIdmg, {idmg})
+  const senseurspassifs = await initialiserSenseurspassifs(fctRabbitMQParIdmg, {idmg})
 
   const root = express()
   root.use(injecterAmqpdao)

@@ -30,5 +30,11 @@ export const MAPPING_DEPENDANCES = [
     nomFormatte: "Coup D'Oeil",
     load: async _=>{return (await import('./deps/millegrilles.coupdoeil-client/src/export.js')).default},
     securite: "3.protege"
+  },
+  {
+    nom: "senseurspassifs",
+    nomFormatte: "Senseurs Passifs",
+    load: async _=>{return (await import('./deps/millegrilles.senseurspassifs-client/src/export.js')).default},
+    securite: "3.protege"
   }
 ]
