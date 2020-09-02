@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.web",
-  "version": "1.31.3",
+  "version": "1.31.4",
   "private": true,
   "dependencies": {
     "@webauthn/client": "^0.1.3",
