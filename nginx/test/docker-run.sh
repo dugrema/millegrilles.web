@@ -18,5 +18,6 @@ docker run --rm -it \
   -v $CONF_FOLDER:/etc/nginx/conf.d \
   -v $MODS_FOLDER:/etc/nginx/conf.d/modules \
   -v acmesh-data:/certs \
+  -v /home/mathieu/mgdev/certs:/certs_mg \
   -v $MILLEGRILLES_FOLDER:$MILLEGRILLES_FOLDER \
   $IMAGE_DOCKER

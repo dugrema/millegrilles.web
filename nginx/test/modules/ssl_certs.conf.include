@@ -2,9 +2,14 @@
 #ssl_certificate       /certs/pki.web_protege.cert;
 #ssl_certificate_key   /certs/pki.web_protege.key;
 
-ssl_certificate       /certs/mg-dev4.maple.maceroc.com/fullchain.cer;
-ssl_certificate_key   /certs/mg-dev4.maple.maceroc.com/mg-dev4.maple.maceroc.com.key;
+ssl_certificate       /certs_mg/pki.web_protege.cert;
+ssl_certificate_key   /certs_mg/pki.web_protege.key;
 
 # OCSP stapling
 ssl_stapling          off;
 ssl_stapling_verify   off;
+
+# Client side verification
+ssl_client_certificate /certs_mg/pki.millegrille;
+ssl_verify_client      optional;
+ssl_verify_depth       1;
