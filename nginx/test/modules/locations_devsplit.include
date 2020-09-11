@@ -1,5 +1,5 @@
-set $upstream_node_millegrilles   https://mg-dev4.maple.maceroc.com:3001;
-set $upstream_react_millegrilles  https://mg-dev4.maple.maceroc.com:3002;
+set $upstream_node_millegrilles   https://192.168.2.131:3001;
+set $upstream_react_millegrilles  https://192.168.2.131:3002;
 
 set $upstream_node_coupdoeil      https://mg-dev4.maple.maceroc.com:3003;
 set $upstream_react_coupdoeil     https://mg-dev4.maple.maceroc.com:3004;
@@ -15,13 +15,28 @@ set $upstream_react_messagerie    https://mg-dev4.maple.maceroc.com:3010;
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
+
+include /etc/nginx/conf.d/modules/error_page.conf.include;
+
+# Verification de l'authentification
+# Invoque pour **chaque** appel a nginx sous une page prive/protegee
+location = /millegrilles/authentification/verifier {
+  proxy_pass        $upstream_node_millegrilles;
+  proxy_pass_request_body off; # no need to send the POST body
+
+  proxy_set_header  Content-Length "";
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+}
+
 # Chargement de l'application dev React /millegrilles
 # /millegrilles
 # /millegrilles/sock-js.node
 # /millegrilles/main.*
 # /millegrilles/static/*
-location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
- proxy_pass        https://localhost:3002;
+location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static/)) {
+ proxy_pass        $upstream_react_millegrilles;  # https://localhost:3002;
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
@@ -31,19 +46,21 @@ location ~ (^/millegrilles$|^/millegrilles/(sockjs-node|main\..*|static/)) {
  proxy_set_header  Connection $connection_upgrade;
  proxy_set_header  Host $host;
 }
-location /millegrilles/socket.io/ {
- proxy_pass        https://localhost:3001;
- proxy_set_header  X-Real-IP $remote_addr;
- proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_set_header  X-Forwarded-Proto $scheme;
 
- # Support WSS
- proxy_set_header  Upgrade $http_upgrade;
- proxy_set_header  Connection $connection_upgrade;
- proxy_set_header  Host $host;
-
- include /etc/nginx/conf.d/auth.include;
+# Support socket.io, proteger via auth plugin
+location /millegrilles/socket.io {
+  proxy_pass        $upstream_node_millegrilles;
+  include /etc/nginx/conf.d/component_base_auth.include;
 }
+
+# Application React - s'occupe de l'authentification (non protege)
+location ~ /millegrilles/* {
+  proxy_pass        $upstream_node_millegrilles;
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+}
+
 
 # Chargement de /coupdoeil via dev React
 # /coupdoeil
