@@ -1,3 +1,5 @@
+set $upstream_monitor   http://192.168.2.131:8080;
+
 set $upstream_node_millegrilles   https://192.168.2.131:3001;
 set $upstream_react_millegrilles  https://192.168.2.131:3002;
 
@@ -18,8 +20,13 @@ set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 set $upstream_node_grosfichiers   https://192.168.2.131:3015;
 set $upstream_react_grosfichiers  https://192.168.2.131:3016;
 
-
 include /etc/nginx/conf.d/modules/error_page.conf.include;
+
+# Monitor
+location /administration {
+  proxy_pass        $upstream_monitor;
+  include /etc/nginx/conf.d/component_base.include;
+}
 
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
