@@ -2,8 +2,8 @@
 #ssl_certificate       /certs/pki.web_protege.cert;
 #ssl_certificate_key   /certs/pki.web_protege.key;
 
-ssl_certificate       /certs_mg/pki.web_protege.cert;
-ssl_certificate_key   /certs_mg/pki.web_protege.key;
+ssl_certificate       /certs_mg/pki.nginx.cert;
+ssl_certificate_key   /certs_mg/pki.nginx.key;
 
 # OCSP stapling
 ssl_stapling          off;

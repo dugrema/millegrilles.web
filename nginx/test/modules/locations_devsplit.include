@@ -19,6 +19,7 @@ set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
 set $upstream_node_grosfichiers   https://192.168.2.131:3015;
 set $upstream_react_grosfichiers  https://192.168.2.131:3016;
+set $upstream_node_fichiers       https://192.168.2.131:3021;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
 
@@ -26,6 +27,15 @@ include /etc/nginx/conf.d/modules/error_page.conf.include;
 location /administration {
   proxy_pass        $upstream_monitor;
   include /etc/nginx/conf.d/component_base.include;
+}
+
+location /fichiers {
+  proxy_pass        $upstream_node_fichiers;
+
+  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
+  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
+
+  include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Verification de l'authentification
