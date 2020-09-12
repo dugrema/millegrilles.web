@@ -1,3 +1,5 @@
+resolver 192.168.2.1 valid=30s;
+
 set $upstream_monitor   http://192.168.2.131:8080;
 
 set $upstream_node_millegrilles   https://192.168.2.131:3001;
@@ -17,9 +19,9 @@ set $upstream_react_messagerie    https://mg-dev4.maple.maceroc.com:3010;
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
-set $upstream_node_grosfichiers   https://192.168.2.131:3015;
-set $upstream_react_grosfichiers  https://192.168.2.131:3016;
-set $upstream_node_fichiers       https://192.168.2.131:3021;
+set $upstream_node_grosfichiers   https://mg-dev4:3015;
+set $upstream_react_grosfichiers  https://mg-dev4:3016;
+set $upstream_node_fichiers       https://mg-dev4:3021;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
 
@@ -32,8 +34,13 @@ location /administration {
 location /fichiers {
   proxy_pass        $upstream_node_fichiers;
 
+  # Mapping certifica client pour connexion consignationfichiers
   proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
   proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
+
+  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  proxy_ssl_verify       on;
+  proxy_ssl_verify_depth 1;
 
   include /etc/nginx/conf.d/component_base_auth.include;
 }
@@ -43,6 +50,7 @@ location /fichiers {
 location = /millegrilles/authentification/verifier {
   proxy_pass        $upstream_node_millegrilles;
   proxy_pass_request_body off; # no need to send the POST body
+  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
   proxy_set_header  Content-Length "";
   proxy_set_header  X-Real-IP $remote_addr;
