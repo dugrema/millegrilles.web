@@ -1,4 +1,4 @@
-REPO=docker.maceroc.com
+REPO=docker.maceroc.com:5000
 DOCKERHUB_REPO=dugremat
 NAME=millegrilles_nginx
 BRANCH=`git name-rev --name-only HEAD`
