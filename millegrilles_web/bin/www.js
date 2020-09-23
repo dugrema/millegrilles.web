@@ -8,6 +8,7 @@ const {initialiser: initialiserServer} = require('millegrilles.common/lib/server
 const {initialiser: initialiserCoupdoeil} = require('millegrilles.coupdoeil')
 const {initialiser: initialiserMillegrilles} = require('millegrilles.maitrecomptes')
 const {initialiser: initialiserSenseurspassifs} = require('millegrilles.senseurspassifs')
+const {initialiser: initialiserGrosFichiers} = require('millegrilles.grosfichiers')
 
 async function init() {
 
@@ -31,6 +32,7 @@ async function init() {
   const millegrilles = await initialiserMillegrilles(fctRabbitMQParIdmg, {idmg})
   const coupdoeil = await initialiserCoupdoeil(fctRabbitMQParIdmg, {idmg})
   const senseurspassifs = await initialiserSenseurspassifs(fctRabbitMQParIdmg, {idmg})
+  const grosfichiers = await initialiserGrosFichiers(fctRabbitMQParIdmg, {idmg})
 
   // Extraire gestionnaire de session
   const sessionMiddleware = millegrilles.session
@@ -42,6 +44,7 @@ async function init() {
     {path: 'millegrilles', ...millegrilles},
     {path: 'coupdoeil', ...coupdoeil},
     {path: 'senseurspassifs', ...senseurspassifs},
+    {path: 'grosfichiers', ...grosfichiers},
   ]
 
   const serverInstance = initialiserServer(

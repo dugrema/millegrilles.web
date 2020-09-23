@@ -2,8 +2,8 @@ resolver 192.168.2.1 valid=30s;
 
 set $upstream_monitor   http://192.168.2.131:8080;
 
-set $upstream_node_millegrilles   https://192.168.2.131:3001;
-set $upstream_react_millegrilles  https://192.168.2.131:3002;
+set $upstream_node_millegrilles   https://mg-dev4:3001;
+set $upstream_react_millegrilles  https://mg-dev4:3002;
 
 set $upstream_node_coupdoeil      https://mg-dev4.maple.maceroc.com:3003;
 set $upstream_react_coupdoeil     https://mg-dev4.maple.maceroc.com:3004;
