@@ -36,5 +36,11 @@ export const MAPPING_DEPENDANCES = [
     nomFormatte: "Senseurs Passifs",
     load: async _=>{return (await import('./deps/millegrilles.senseurspassifs-client/src/export.js')).default},
     securite: "3.protege"
+  },
+  {
+    nom: "grosfichiers",
+    nomFormatte: "GrosFichiers",
+    load: async _=>{return (await import('./deps/millegrilles.grosfichiers-client/src/export.js')).default},
+    securite: "3.protege"
   }
 ]
