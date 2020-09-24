@@ -1,6 +1,6 @@
 resolver 192.168.2.1 valid=30s;
 
-set $upstream_monitor   http://192.168.2.131:8080;
+set $upstream_monitor   http://mg-dev4:8080;
 
 set $upstream_node_millegrilles   https://mg-dev4:3001;
 set $upstream_react_millegrilles  https://mg-dev4:3002;
