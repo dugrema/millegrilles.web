@@ -1,12 +1,16 @@
 resolver 192.168.2.1 valid=30s;
 
+set $upstream_web_protege   https://192.168.2.131:1443;
+
+# Remplacer les proxy_pass des modules a tester
+
 set $upstream_monitor   http://mg-dev4:8080;
 
-set $upstream_node_millegrilles   https://mg-dev4:3001;
-set $upstream_react_millegrilles  https://mg-dev4:3002;
+set $upstream_node_millegrilles   https://192.168.2.131:3001;
+set $upstream_react_millegrilles  https://192.168.2.131:3002;
 
-set $upstream_node_coupdoeil      https://mg-dev4.maple.maceroc.com:3003;
-set $upstream_react_coupdoeil     https://mg-dev4.maple.maceroc.com:3004;
+set $upstream_node_coupdoeil      https://192.168.2.131:3003;
+set $upstream_react_coupdoeil     https://192.168.2.131:3004;
 
 set $upstream_node_posteur        https://mg-dev4.maple.maceroc.com:3005;
 set $upstream_react_posteur       https://mg-dev4.maple.maceroc.com:3006;
@@ -19,8 +23,8 @@ set $upstream_react_messagerie    https://mg-dev4.maple.maceroc.com:3010;
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
-set $upstream_node_grosfichiers   https://mg-dev4:3015;
-set $upstream_react_grosfichiers  https://mg-dev4:3016;
+set $upstream_node_grosfichiers   https://192.168.2.131:3015;
+set $upstream_react_grosfichiers  https://192.168.2.131:3016;
 set $upstream_node_fichiers       https://mg-dev4:3021;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
@@ -31,10 +35,16 @@ location /administration {
   include /etc/nginx/conf.d/component_base.include;
 }
 
+# Monitor
+location /installation {
+  proxy_pass        $upstream_monitor;
+  include /etc/nginx/conf.d/component_base.include;
+}
+
 location /fichiers {
   proxy_pass        $upstream_node_fichiers;
 
-  # Mapping certifica client pour connexion consignationfichiers
+  # Mapping certificat client pour connexion consignationfichiers
   proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
   proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
 
@@ -48,11 +58,25 @@ location /fichiers {
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
 location = /millegrilles/authentification/verifier {
-  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
+
   proxy_pass_request_body off; # no need to send the POST body
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
   proxy_set_header  Content-Length "";
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+}
+
+# Authentification par usager autre que proprietaire
+location = /millegrilles/authentification/verifierUsager {
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
+
+  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
@@ -64,7 +88,9 @@ location = /millegrilles/authentification/verifier {
 # /millegrilles/main.*
 # /millegrilles/static/*
 location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static/)) {
- proxy_pass        $upstream_react_millegrilles;  # https://localhost:3002;
+ # proxy_pass        $upstream_react_millegrilles;
+ proxy_pass        $upstream_web_protege;
+
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
@@ -77,13 +103,17 @@ location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-n
 
 # Support socket.io, proteger via auth plugin
 location /millegrilles/socket.io {
-  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
+
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Application React - s'occupe de l'authentification (non protege)
 location ~ /millegrilles/* {
-  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
+
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
@@ -99,8 +129,8 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
   # Protection via auth plugin
   include /etc/nginx/conf.d/auth.include;
 
-  # proxy_pass        $upstream_react_coupdoeil;
-  proxy_pass        https://mg-dev4.maple.maceroc.com:3004;
+  proxy_pass        $upstream_react_coupdoeil;
+  # proxy_pass        $upstream_web_protege;
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
@@ -110,10 +140,19 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
   proxy_set_header  Connection $connection_upgrade;
   proxy_set_header  Host $host;
 }
-location /coupdoeil {
-  # proxy_pass $upstream_node_coupdoeil;
-  proxy_pass        https://mg-dev4.maple.maceroc.com:3003;
+location /coupdoeil/socket.io {
+  proxy_pass        $upstream_node_coupdoeil;
+  # proxy_pass        $upstream_web_protege;
+
   include /etc/nginx/conf.d/component_base_auth.include;
+}
+location /coupdoeil {
+  proxy_pass        $upstream_node_coupdoeil;
+  # proxy_pass        $upstream_web_protege;
+
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
 }
 
 # Chargement de /posteur via dev React
@@ -173,23 +212,23 @@ location /coupdoeil {
 # /messagerie/sock-js.node
 # /messagerie/main.*
 # /messagerie/static/*
-location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- # proxy_pass        $upstream_react_messagerie;
- proxy_pass        https://localhost:3010;
- proxy_set_header  X-Real-IP $remote_addr;
- proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- proxy_set_header  Upgrade $http_upgrade;
- proxy_set_header  Connection $connection_upgrade;
- proxy_set_header  Host $host;
-}
-location /messagerie {
-  # proxy_pass $upstream_node_messagerie;
-  proxy_pass        https://localhost:3009;
-  include /etc/nginx/conf.d/component_base_auth.include;
-}
+#location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+# # proxy_pass        $upstream_react_messagerie;
+# proxy_pass        https://localhost:3010;
+# proxy_set_header  X-Real-IP $remote_addr;
+# proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+# proxy_set_header  X-Forwarded-Proto $scheme;
+#
+# # Support WSS
+# proxy_set_header  Upgrade $http_upgrade;
+# proxy_set_header  Connection $connection_upgrade;
+# proxy_set_header  Host $host;
+#}
+#location /messagerie {
+#  # proxy_pass $upstream_node_messagerie;
+#  proxy_pass        https://localhost:3009;
+#  include /etc/nginx/conf.d/component_base_auth.include;
+#}
 
 # Chargement de /grosfichiers via dev React
 # /grosfichiers
@@ -197,7 +236,9 @@ location /messagerie {
 # /grosfichiers/main.*
 # /grosfichiers/static/*
 location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- proxy_pass        $upstream_react_grosfichiers;
+ #proxy_pass        $upstream_react_grosfichiers;
+ proxy_pass        $upstream_web_protege;
+
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
  proxy_set_header  X-Forwarded-Proto $scheme;
@@ -208,18 +249,7 @@ location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-
  proxy_set_header  Host $host;
 }
 location /grosfichiers {
-  proxy_pass        $upstream_node_grosfichiers;
+  #proxy_pass        $upstream_node_grosfichiers;
+  proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
-}
-
-# Site de test
-location /prive {
- include           /etc/nginx/conf.d/auth.include;
- include           /etc/nginx/conf.d/modules/proxypass.include;
- proxy_set_header  X-Real-IP $remote_addr;
- proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_set_header  X-Forwarded-Proto $scheme;
-
- proxy_set_header  Remote-User $auth_user_prive;
- proxy_set_header  Est-Proprietaire $auth_proprietaire;
 }
