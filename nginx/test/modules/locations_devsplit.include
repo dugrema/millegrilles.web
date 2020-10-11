@@ -54,6 +54,19 @@ location /fichiers {
 
   include /etc/nginx/conf.d/component_base_auth.include;
 }
+location /backup {
+  proxy_pass        $upstream_node_fichiers;
+
+  # Mapping certificat client pour connexion consignationfichiers
+  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
+  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
+
+  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  proxy_ssl_verify       on;
+  proxy_ssl_verify_depth 1;
+
+  include /etc/nginx/conf.d/component_base_auth.include;
+}
 
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
@@ -119,41 +132,25 @@ location ~ /millegrilles/* {
   proxy_set_header  X-Forwarded-Proto $scheme;
 }
 
+location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+ proxy_pass        $upstream_react_coupdoeil;
+ #proxy_pass        $upstream_web_protege;
 
-# Chargement de /coupdoeil via dev React
-# /coupdoeil
-# /coupdoeil/sock-js.node
-# /coupdoeil/main.*
-# /coupdoeil/static/*
-location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*)) {
-  # Protection via auth plugin
-  include /etc/nginx/conf.d/auth.include;
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
 
-  proxy_pass        $upstream_react_coupdoeil;
-  # proxy_pass        $upstream_web_protege;
-  proxy_set_header  X-Real-IP $remote_addr;
-  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header  X-Forwarded-Proto $scheme;
-
-  # Support WSS
-  proxy_set_header  Upgrade $http_upgrade;
-  proxy_set_header  Connection $connection_upgrade;
-  proxy_set_header  Host $host;
-}
-location /coupdoeil/socket.io {
-  proxy_pass        $upstream_node_coupdoeil;
-  # proxy_pass        $upstream_web_protege;
-
-  include /etc/nginx/conf.d/component_base_auth.include;
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
 }
 location /coupdoeil {
   proxy_pass        $upstream_node_coupdoeil;
-  # proxy_pass        $upstream_web_protege;
-
-  proxy_set_header  X-Real-IP $remote_addr;
-  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header  X-Forwarded-Proto $scheme;
+  #proxy_pass        $upstream_web_protege;
+  #include /etc/nginx/conf.d/component_base_auth.include;
 }
+
 
 # Chargement de /posteur via dev React
 # /posteur
@@ -236,8 +233,8 @@ location /coupdoeil {
 # /grosfichiers/main.*
 # /grosfichiers/static/*
 location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- #proxy_pass        $upstream_react_grosfichiers;
- proxy_pass        $upstream_web_protege;
+ proxy_pass        $upstream_react_grosfichiers;
+ #proxy_pass        $upstream_web_protege;
 
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -249,7 +246,7 @@ location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-
  proxy_set_header  Host $host;
 }
 location /grosfichiers {
-  #proxy_pass        $upstream_node_grosfichiers;
-  proxy_pass        $upstream_web_protege;
+  proxy_pass        $upstream_node_grosfichiers;
+  #proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
