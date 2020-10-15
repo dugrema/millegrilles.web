@@ -71,8 +71,8 @@ location /backup {
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
 location = /millegrilles/authentification/verifier {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   proxy_pass_request_body off; # no need to send the POST body
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
@@ -85,8 +85,8 @@ location = /millegrilles/authentification/verifier {
 
 # Authentification par usager autre que proprietaire
 location = /millegrilles/authentification/verifierUsager {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
@@ -101,8 +101,8 @@ location = /millegrilles/authentification/verifierUsager {
 # /millegrilles/main.*
 # /millegrilles/static/*
 location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static/)) {
- proxy_pass        $upstream_react_millegrilles;
- # proxy_pass        $upstream_web_protege;
+ # proxy_pass        $upstream_react_millegrilles;
+ proxy_pass        $upstream_web_protege;
 
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -116,16 +116,16 @@ location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-n
 
 # Support socket.io, proteger via auth plugin
 location /millegrilles/socket.io {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Application React - s'occupe de l'authentification (non protege)
 location ~ /millegrilles/* {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
