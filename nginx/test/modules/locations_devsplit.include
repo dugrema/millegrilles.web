@@ -21,6 +21,9 @@ set $upstream_react_vitrine       https://mg-dev4.maple.maceroc.com:3008;
 set $upstream_node_messagerie     https://mg-dev4.maple.maceroc.com:3009;
 set $upstream_react_messagerie    https://mg-dev4.maple.maceroc.com:3010;
 
+set $upstream_node_senseurspassifs  https://192.168.2.131:3013;
+set $upstream_react_senseurspassifs https://192.168.2.131:3014;
+
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
 set $upstream_node_grosfichiers   https://192.168.2.131:3015;
@@ -133,8 +136,8 @@ location ~ /millegrilles/* {
 }
 
 location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- proxy_pass        $upstream_react_coupdoeil;
- #proxy_pass        $upstream_web_protege;
+ # proxy_pass        $upstream_react_coupdoeil;
+ proxy_pass        $upstream_web_protege;
 
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -146,8 +149,8 @@ location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update
  proxy_set_header  Host $host;
 }
 location /coupdoeil {
-  proxy_pass        $upstream_node_coupdoeil;
-  #proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_coupdoeil;
+  proxy_pass        $upstream_web_protege;
   #include /etc/nginx/conf.d/component_base_auth.include;
 }
 
@@ -247,6 +250,30 @@ location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-
 }
 location /grosfichiers {
   proxy_pass        $upstream_node_grosfichiers;
+  #proxy_pass        $upstream_web_protege;
+  include /etc/nginx/conf.d/component_base_auth.include;
+}
+
+# Chargement de /grosfichiers via dev React
+# /senseurspassifs
+# /senseurspassifs/sock-js.node
+# /senseurspassifs/main.*
+# /senseurspassifs/static/*
+location ~ (^/senseurspassifs$|^/senseurspassifs/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+ proxy_pass        $upstream_react_senseurspassifs;
+ #proxy_pass        $upstream_web_protege;
+
+ proxy_set_header  X-Real-IP $remote_addr;
+ proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ proxy_set_header  Upgrade $http_upgrade;
+ proxy_set_header  Connection $connection_upgrade;
+ proxy_set_header  Host $host;
+}
+location /senseurspassifs {
+  proxy_pass        $upstream_node_senseurspassifs;
   #proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
