@@ -1,6 +1,7 @@
 resolver 192.168.2.1 valid=30s;
 
 set $upstream_web_protege   https://192.168.2.131:1443;
+# set $upstream_web_protege   https://192.168.2.131:3000;
 
 # Remplacer les proxy_pass des modules a tester
 
@@ -236,8 +237,8 @@ location /coupdoeil {
 # /grosfichiers/main.*
 # /grosfichiers/static/*
 location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- proxy_pass        $upstream_react_grosfichiers;
- #proxy_pass        $upstream_web_protege;
+ # proxy_pass        $upstream_react_grosfichiers;
+ proxy_pass        $upstream_web_protege;
 
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -249,8 +250,8 @@ location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-
  proxy_set_header  Host $host;
 }
 location /grosfichiers {
-  proxy_pass        $upstream_node_grosfichiers;
-  #proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_grosfichiers;
+  proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
@@ -260,8 +261,8 @@ location /grosfichiers {
 # /senseurspassifs/main.*
 # /senseurspassifs/static/*
 location ~ (^/senseurspassifs$|^/senseurspassifs/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- proxy_pass        $upstream_react_senseurspassifs;
- #proxy_pass        $upstream_web_protege;
+ # proxy_pass        $upstream_react_senseurspassifs;
+ proxy_pass        $upstream_web_protege;
 
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -273,7 +274,7 @@ location ~ (^/senseurspassifs$|^/senseurspassifs/(sockjs-node|static|main\..*|.*
  proxy_set_header  Host $host;
 }
 location /senseurspassifs {
-  proxy_pass        $upstream_node_senseurspassifs;
-  #proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_senseurspassifs;
+  proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
