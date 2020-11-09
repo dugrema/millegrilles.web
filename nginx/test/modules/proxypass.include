@@ -1,5 +1,6 @@
 # set $upstream https://mg-dev4.maple.maceroc.com:3000;
-set $upstream https://192.168.2.131:3001;
+#set $upstream https://192.168.2.131:3001;
+set $upstream https://192.168.2.131:1443;
 
 # proxy_pass $upstream;
 #proxy_pass https://localhost:3000;
