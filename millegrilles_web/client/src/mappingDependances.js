@@ -42,5 +42,11 @@ export const MAPPING_DEPENDANCES = [
     nomFormatte: "GrosFichiers",
     load: async _=>{return (await import('./deps/millegrilles.grosfichiers-client/src/export.js')).default},
     securite: "3.protege"
+  },
+  {
+    nom: "publication",
+    nomFormatte: "Publication",
+    load: async _=>{return (await import('./deps/millegrilles.publication-client/src/export.js')).default},
+    securite: "3.protege"
   }
 ]
