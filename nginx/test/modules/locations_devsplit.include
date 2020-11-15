@@ -16,8 +16,8 @@ set $upstream_react_coupdoeil     https://192.168.2.131:3004;
 set $upstream_node_publication    https://192.168.2.131:3023;
 set $upstream_react_publication   https://192.168.2.131:3024;
 
-set $upstream_node_vitrine        https://mg-dev4.maple.maceroc.com:3007;
-set $upstream_react_vitrine       https://mg-dev4.maple.maceroc.com:3008;
+set $upstream_node_vitrine        https://192.168.2.131:3025;
+set $upstream_react_vitrine       https://192.168.2.131:3026;
 
 set $upstream_node_senseurspassifs  https://192.168.2.131:3013;
 set $upstream_react_senseurspassifs https://192.168.2.131:3014;
@@ -81,8 +81,8 @@ location /backup {
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
 location = /millegrilles/authentification/verifier {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   proxy_pass_request_body off; # no need to send the POST body
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
@@ -95,8 +95,8 @@ location = /millegrilles/authentification/verifier {
 
 # Authentification par usager autre que proprietaire
 location = /millegrilles/authentification/verifierUsager {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
@@ -111,8 +111,8 @@ location = /millegrilles/authentification/verifierUsager {
 # /millegrilles/main.*
 # /millegrilles/static/*
 location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static/)) {
- proxy_pass        $upstream_react_millegrilles;
- # proxy_pass        $upstream_web_protege;
+ # proxy_pass        $upstream_react_millegrilles;
+ proxy_pass        $upstream_web_protege;
 
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -126,16 +126,16 @@ location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-n
 
 # Support socket.io, proteger via auth plugin
 location /millegrilles/socket.io {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
 # Application React - s'occupe de l'authentification (non protege)
 location ~ /millegrilles/* {
-  proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_node_millegrilles;
+  proxy_pass        $upstream_web_protege;
 
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -172,6 +172,7 @@ location ~ (^/publication$|^/publication/(sockjs-node|static|main\..*)) {
   # include /etc/nginx/conf.d/auth.include;
 
   proxy_pass        $upstream_react_publication;
+  # proxy_pass        $upstream_web_protege;
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
@@ -183,6 +184,7 @@ location ~ (^/publication$|^/publication/(sockjs-node|static|main\..*)) {
 }
 location /publication {
   proxy_pass $upstream_node_publication;
+  # proxy_pass        $upstream_web_protege;
   # include /etc/nginx/conf.d/component_base_auth.include;
   include /etc/nginx/conf.d/component_base.include;
 }
@@ -192,26 +194,32 @@ location /publication {
 # /vitrine/sock-js.node
 # /vitrine/main.*
 # /vitrine/static/*
-#location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
-# # proxy_pass        $upstream_react_vitrine;
-# proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
-# proxy_set_header  X-Real-IP $remote_addr;
-# proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-# proxy_set_header  X-Forwarded-Proto $scheme;
-#
-# # Support WSS
-# proxy_set_header  Upgrade $http_upgrade;
-# proxy_set_header  Connection $connection_upgrade;
-# proxy_set_header  Host $host;
-#}
-#location /vitrine/data {
-#  alias /var/opt/millegrilles/37DRyLk3Mog63vW2uqQnPT9jfCUSqKWqRmjUHsu/mounts/nginx/data;
-#}
-#location /vitrine {
-#  # proxy_pass $upstream_node_vitrine;
-#  proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
-#  include /etc/nginx/conf.d/component_base.include;
-#}
+location /vitrine/sites {
+  alias /var/opt/millegrilles/nginx/data/vitrine/sites;
+}
+location /vitrine/posts {
+  alias /var/opt/millegrilles/nginx/data/vitrine/posts;
+}
+location /vitrine/collections {
+  alias /var/opt/millegrilles/nginx/data/vitrine/collections;
+}
+location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json|locales)) {
+  proxy_pass        $upstream_react_vitrine;
+  # proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+
+  # Support WSS
+  proxy_set_header  Upgrade $http_upgrade;
+  proxy_set_header  Connection $connection_upgrade;
+  proxy_set_header  Host $host;
+}
+location /vitrine {
+  proxy_pass $upstream_node_vitrine;
+  # proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
+  include /etc/nginx/conf.d/component_base.include;
+}
 
 # Chargement de /grosfichiers via dev React
 # /grosfichiers
