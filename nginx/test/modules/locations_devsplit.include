@@ -219,6 +219,11 @@ location /vitrine {
   proxy_pass $upstream_node_vitrine;
   # proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
   include /etc/nginx/conf.d/component_base.include;
+
+  # Support WSS
+  proxy_set_header  Upgrade $http_upgrade;
+  proxy_set_header  Connection $connection_upgrade;
+  proxy_set_header  Host $host;
 }
 
 # Chargement de /grosfichiers via dev React
