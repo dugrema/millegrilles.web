@@ -42,7 +42,8 @@ build_react() {
   REP_COMPTES_STATIC="$REP_STATIC_GLOBAL/millegrilles"
   build_app $REP_COMPTES_SRC $REP_COMPTES_STATIC
 
-  tar -zcf ../$BUILD_FILE $REP_STATIC_GLOBAL
+  cd $REP_STATIC_GLOBAL
+  tar -zcf ../$BUILD_FILE millegrilles
 }
 
 telecharger_static() {
