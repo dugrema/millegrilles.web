@@ -1,7 +1,7 @@
 resolver 192.168.2.1 valid=30s;
 
-set $upstream_web_protege   https://192.168.2.131:1443;
-# set $upstream_web_protege   https://192.168.2.131:3000;
+# set $upstream_web_protege   https://192.168.2.131:1443;
+set $upstream_web_protege   https://192.168.2.131:3000;
 
 # Remplacer les proxy_pass des modules a tester
 
@@ -138,16 +138,16 @@ location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-n
 }
 
 # Support socket.io, proteger via auth plugin
-location /millegrilles/socket.io {
+location = /millegrilles/socket.io/ {
   # proxy_pass        $upstream_node_millegrilles;
   proxy_pass        $upstream_web_protege;
 
-  # include /etc/nginx/conf.d/component_base_auth.include;
-  include /etc/nginx/conf.d/component_base.include;
+  include /etc/nginx/conf.d/component_base_auth.include;
+  # include /etc/nginx/conf.d/component_base.include;
 }
 
 # Application React - s'occupe de l'authentification (non protege)
-location ~ /millegrilles/* {
+location /millegrilles {
   # proxy_pass        $upstream_node_millegrilles;
   proxy_pass        $upstream_web_protege;
 
