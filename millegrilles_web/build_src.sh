@@ -106,7 +106,7 @@ REP_STATIC_GLOBAL=${REP_COURANT}/static
 BUILD_FILE="${NAME}.${VERSION}.tar.gz"
 BUILD_PATH="git/millegrilles.web/millegrilles_web"
 
-docker pull node:12
+# docker pull node:12
 npm install --production
 
 traiter_fichier_react
