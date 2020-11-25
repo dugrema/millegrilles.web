@@ -49,6 +49,8 @@ location /fichiers {
   proxy_cache_use_stale error timeout updating
                         http_500 http_502 http_503 http_504;
 
+  proxy_headers_hash_bucket_size 64;
+
   proxy_pass        $upstream_node_fichiers;
 
   # Mapping certificat client pour connexion consignationfichiers
