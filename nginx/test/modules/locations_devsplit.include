@@ -187,8 +187,8 @@ location ~ (^/publication$|^/publication/(sockjs-node|static|main\..*)) {
   # Protection via auth plugin
   # include /etc/nginx/conf.d/auth.include;
 
-  proxy_pass        $upstream_react_publication;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass        $upstream_react_publication;
+  proxy_pass        $upstream_web_protege;
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
@@ -199,8 +199,8 @@ location ~ (^/publication$|^/publication/(sockjs-node|static|main\..*)) {
   proxy_set_header  Host $host;
 }
 location /publication {
-  proxy_pass $upstream_node_publication;
-  # proxy_pass        $upstream_web_protege;
+  # proxy_pass $upstream_node_publication;
+  proxy_pass        $upstream_web_protege;
   # include /etc/nginx/conf.d/component_base_auth.include;
   include /etc/nginx/conf.d/component_base.include;
 }

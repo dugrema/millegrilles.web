@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.web-client",
-  "version": "1.35.9",
+  "version": "1.36.0",
   "description": "Client web pour MilleGrilles",
   "main": "./bin/www.js",
   "scripts": {
@@ -20,8 +20,8 @@
   "dependencies": {
     "axios": "^0.20.0",
     "express": "^4.17.1",
-    "millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.35",
-    "millegrilles.coupdoeil": "git+ssh://git.maceroc.com/git/millegrilles.coupdoeil.git#1.35",
+    "millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.36",
+    "millegrilles.coupdoeil": "git+ssh://git.maceroc.com/git/millegrilles.coupdoeil.git#1.36",
     "millegrilles.grosfichiers": "git+ssh://git.maceroc.com/git/millegrilles.grosfichiers.git#1.35",
     "millegrilles.maitrecomptes": "git+ssh://git.maceroc.com/git/millegrilles.maitrecomptes.git#1.35",
     "millegrilles.publication": "git+ssh://git.maceroc.com/git/millegrilles.publication.git#1.35",
