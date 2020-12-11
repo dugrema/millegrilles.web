@@ -13,7 +13,7 @@
     "idb": "^5.0.4",
     "millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.36",
     "millegrilles.coupdoeil-client": "git+ssh://git.maceroc.com/git/millegrilles.coupdoeil.client.git#1.36",
-    "millegrilles.grosfichiers-client": "git+ssh://git.maceroc.com/git/millegrilles.grosfichiers.client.git#1.35",
+    "millegrilles.grosfichiers-client": "git+ssh://git.maceroc.com/git/millegrilles.grosfichiers.client.git#1.36",
     "millegrilles.maitrecomptes-client": "git+ssh://git.maceroc.com/git/millegrilles.maitrecomptes.client.git#1.35",
     "millegrilles.publication-client": "git+ssh://git.maceroc.com/git/millegrilles.publication.client.git#1.35",
     "millegrilles.senseurspassifs-client": "git+ssh://git.maceroc.com/git/millegrilles.senseurspassifs.client.git#1.35",
