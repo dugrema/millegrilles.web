@@ -4,7 +4,7 @@ const debug = require('debug')('millegrilles:web:www')
 const express = require('express')
 
 const amqpdao = require('../models/amqpdao')
-const {initialiser: initialiserServer} = require('millegrilles.common/lib/server3')
+const {initialiser: initialiserServer} = require('@dugrema/millegrilles.common/lib/server3')
 const {initialiser: initialiserCoupdoeil} = require('millegrilles.coupdoeil')
 const {initialiser: initialiserMillegrilles} = require('millegrilles.maitrecomptes')
 const {initialiser: initialiserSenseurspassifs} = require('millegrilles.senseurspassifs')
