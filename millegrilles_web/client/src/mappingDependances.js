@@ -1,4 +1,9 @@
 import manifest from './manifest.build.js'
+import 'react-summernote/dist/react-summernote.css' // import styles pour Summernote
+
+// Dependance pour Summernote (hack)
+import $ from 'jquery'
+window.jQuery = $
 
 export function getManifest() {
   return manifest
