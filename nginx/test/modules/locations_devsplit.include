@@ -31,6 +31,11 @@ set $upstream_node_fichiers       https://mg-dev4:3021;
 include /etc/nginx/conf.d/modules/error_page.conf.include;
 
 # Monitor
+location /test {
+  alias /var/opt/millegrilles/nginx/html/test;
+}
+
+# Monitor
 location /administration {
   proxy_pass        $upstream_monitor;
   include /etc/nginx/conf.d/component_base.include;
@@ -43,9 +48,16 @@ location /installation {
 }
 
 location /fichiers {
+  slice  5m;
+
   proxy_cache       cache_fichiers;
   proxy_cache_lock  on;
   proxy_cache_background_update on;
+
+  proxy_cache_key   $uri$is_args$args$slice_range;
+  proxy_set_header  Range $slice_range;
+  proxy_cache_valid 200 206 1d;
+
   proxy_cache_use_stale error timeout updating
                         http_500 http_502 http_503 http_504;
 
