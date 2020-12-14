@@ -231,6 +231,13 @@ location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.jso
   proxy_set_header  Connection $connection_upgrade;
   proxy_set_header  Host $host;
 }
+location /vitrine/section {
+  # rewrite ^(.*)$ /vitrine/index.html;
+  proxy_pass        $upstream_react_vitrine;
+}
+location = /vitrine/ {
+  return 301 https://$http_host/vitrine;
+}
 location /vitrine {
   proxy_pass $upstream_node_vitrine;
   # proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
