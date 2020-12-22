@@ -47,7 +47,7 @@ location /installation {
   include /etc/nginx/conf.d/component_base.include;
 }
 
-location /fichiers {
+location /fichiers/public3 {
   # Redirect pour AWS S3/CloudFront
   if ($args ~* "preview=1") {
     rewrite ^/fichiers/(public/[0-9a-f\-]+).*$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1_preview_$arg_preview? redirect;
@@ -58,7 +58,7 @@ location /fichiers {
   rewrite ^/fichiers/(public/.*)$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1 redirect;
 }
 
-location /fichiers1 {
+location /fichiers {
   slice  5m;
 
   proxy_cache       cache_fichiers;
