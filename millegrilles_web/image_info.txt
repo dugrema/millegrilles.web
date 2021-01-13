@@ -3,7 +3,8 @@ DOCKERHUB_REPO=dugremat
 URL_SERVEUR_DEV=mathieu@mg-dev4.maple.maceroc.com
 NAME=millegrilles_web
 ARCH_SUPPORTEES=( x86_64 armv7l aarch64 )
-BRANCH=`git name-rev --name-only HEAD`
-BUILD=2
+#BRANCH=`git name-rev --name-only HEAD`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
+BUILD=0
 
 VERSION=$BRANCH.$BUILD

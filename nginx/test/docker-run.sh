@@ -8,7 +8,9 @@ MILLEGRILLES_FOLDER=/var/opt/millegrilles
 
 # Override version (e.g. pour utiliser x86_64_...)
 ARCH=`uname -m`
-VERSION=${ARCH}_${VERSION}
+#VERSION=${ARCH}_${VERSION}
+#VERSION=`git rev-parse --abbrev-ref HEAD`
+VERSION="x86_64_`git rev-parse --abbrev-ref HEAD`.$BUILD"
 IMAGE_DOCKER=$REPO/$NAME:$VERSION
 
 echo Image docker : $IMAGE_DOCKER
