@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.web-client",
-  "version": "1.38.0",
+  "version": "1.38.1",
   "description": "Client web pour MilleGrilles",
   "main": "./bin/www.js",
   "scripts": {
