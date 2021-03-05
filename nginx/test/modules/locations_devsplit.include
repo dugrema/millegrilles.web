@@ -279,8 +279,8 @@ location /vitrine {
 # /grosfichiers/main.*
 # /grosfichiers/static/*
 location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- # proxy_pass        $upstream_react_grosfichiers;
- proxy_pass        $upstream_web_protege;
+ proxy_pass        $upstream_react_grosfichiers;
+ # proxy_pass        $upstream_web_protege;
 
  proxy_set_header  X-Real-IP $remote_addr;
  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -292,8 +292,8 @@ location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-
  proxy_set_header  Host $host;
 }
 location /grosfichiers {
-  # proxy_pass        $upstream_node_grosfichiers;
-  proxy_pass        $upstream_web_protege;
+  proxy_pass        $upstream_node_grosfichiers;
+  # proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
