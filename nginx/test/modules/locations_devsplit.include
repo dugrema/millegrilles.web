@@ -8,7 +8,7 @@ set $upstream_web_protege   https://192.168.2.131:1443;
 set $upstream_monitor   http://mg-dev4:8080;
 
 set $upstream_node_millegrilles   https://192.168.2.131:3001;
-set $upstream_react_millegrilles  https://192.168.2.131:3002;
+set $upstream_react_millegrilles  https://192.168.2.131:3002;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.131:3003;
 set $upstream_react_coupdoeil     https://192.168.2.131:3004;
@@ -27,6 +27,9 @@ set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 set $upstream_node_grosfichiers   https://192.168.2.131:3015;
 set $upstream_react_grosfichiers  https://192.168.2.131:3016;
 set $upstream_node_fichiers       https://mg-dev4:3021;
+
+set $upstream_node_place          https://192.168.2.131:3027;
+set $upstream_react_place         https://192.168.2.131:3028;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
 
@@ -160,6 +163,14 @@ location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-n
  proxy_set_header  Upgrade $http_upgrade;
  proxy_set_header  Connection $connection_upgrade;
  proxy_set_header  Host $host;
+
+ #gzip on;
+ #gzip_vary on;
+ #gzip_proxied any;
+ #gzip_comp_level 6;
+ #gzip_buffers 16 8k;
+ #gzip_http_version 1.1;
+ #gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 }
 
 # Support socket.io, proteger via auth plugin
@@ -319,4 +330,31 @@ location /senseurspassifs {
   # proxy_pass        $upstream_node_senseurspassifs;
   proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
+}
+
+# Chargement de /place via dev React
+# /place
+# /place/sock-js.node
+# /place/main.*
+# /place/static/*
+location ~ (^/place$|^/place/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+ proxy_pass        $upstream_react_place;
+ # proxy_pass        $upstream_web_protege;
+
+ #proxy_set_header  X-Real-IP $remote_addr;
+ #proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ #proxy_set_header  X-Forwarded-Proto $scheme;
+
+ # Support WSS
+ #proxy_set_header  Upgrade $http_upgrade;
+ #proxy_set_header  Connection $connection_upgrade;
+ #proxy_set_header  Host $host;
+
+ include /etc/nginx/conf.d/component_base_auth.include;
+}
+location /place {
+  proxy_pass        $upstream_node_place;
+  # proxy_pass        $upstream_web_protege;
+  include /etc/nginx/conf.d/component_base_auth.include;
+  # include /etc/nginx/conf.d/component_base.include;
 }
