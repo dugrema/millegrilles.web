@@ -2,8 +2,11 @@
 #ssl_certificate       /certs/pki.web_protege.cert;
 #ssl_certificate_key   /certs/pki.web_protege.key;
 
-ssl_certificate       /certs_mg/pki.nginx.cert;
-ssl_certificate_key   /certs_mg/pki.nginx.key;
+#ssl_certificate       /certs_mg/pki.nginx.cert;
+#ssl_certificate_key   /certs_mg/pki.nginx.key;
+
+ssl_certificate       /certs/mg-dev4.maple.maceroc.com/fullchain.cer;
+ssl_certificate_key   /certs/mg-dev4.maple.maceroc.com/mg-dev4.maple.maceroc.com.key;
 
 # OCSP stapling
 ssl_stapling          off;
