@@ -2,7 +2,8 @@
 auth_request      /millegrilles/authentification/verifier_public;
 
 # Retourner l'identificateur usager
-auth_request_set  $auth_user_id         $upstream_http_user_id;
-auth_request_set  $auth_user_name       $upstream_http_user_name;
-auth_request_set  $auth_auth_primaire   $upstream_http_auth_primaire;
-auth_request_set  $auth_auth_secondaire $upstream_http_auth_secondaire;
+auth_request_set  $auth_user_name        $upstream_http_user_name;
+auth_request_set  $auth_user_id          $upstream_http_user_id;
+auth_request_set  $auth_user_securite    $upstream_http_user_securite;
+auth_request_set  $auth_auth_primaire    $upstream_http_auth_primaire;
+auth_request_set  $auth_auth_secondaire  $upstream_http_auth_secondaire;
