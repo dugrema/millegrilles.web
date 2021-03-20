@@ -17,4 +17,7 @@ server {
 
     # Inclure les autres sites sous le noeud protege
     include /etc/nginx/conf.d/modules/locations.include;
+    include /etc/nginx/conf.d/modules/*.app.location;
 }
+
+include /etc/nginx/conf.d/modules/*.app.server;
