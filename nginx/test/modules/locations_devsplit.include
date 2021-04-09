@@ -8,10 +8,10 @@ set $upstream_web_protege   https://192.168.2.131:1443;
 set $upstream_monitor   http://mg-dev4:8080;
 
 set $upstream_node_millegrilles   https://192.168.2.131:3001;
-set $upstream_react_millegrilles  https://192.168.2.131:3002;   # 3002 separe
+set $upstream_react_millegrilles  https://192.168.2.131:3001;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.131:3003;
-set $upstream_react_coupdoeil     https://192.168.2.131:3004;   # 3004
+set $upstream_react_coupdoeil     https://192.168.2.131:3003;   # 3004
 
 set $upstream_node_publication    https://192.168.2.131:3023;
 set $upstream_react_publication   https://192.168.2.131:3023;   # 3024
@@ -109,8 +109,8 @@ location /backup {
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
 location = /millegrilles/authentification/verifier {
-  # proxy_pass        $upstream_node_millegrilles;
-  proxy_pass        $upstream_web_protege;
+  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_web_protege;
 
   proxy_pass_request_body off; # no need to send the POST body
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
@@ -122,8 +122,8 @@ location = /millegrilles/authentification/verifier {
 }
 
 location = /millegrilles/authentification/verifier_public {
-  # proxy_pass        $upstream_node_millegrilles;
-  proxy_pass        $upstream_web_protege;
+  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_web_protege;
 
   proxy_pass_request_body off; # no need to send the POST body
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
@@ -136,8 +136,8 @@ location = /millegrilles/authentification/verifier_public {
 
 # Authentification par usager autre que proprietaire
 location = /millegrilles/authentification/verifierUsager {
-  # proxy_pass        $upstream_node_millegrilles;
-  proxy_pass        $upstream_web_protege;
+  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_web_protege;
 
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
@@ -152,19 +152,22 @@ location = /millegrilles/authentification/verifierUsager {
 # /millegrilles/main.*
 # /millegrilles/static/*
 location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static/)) {
- # proxy_pass        $upstream_react_millegrilles;
- proxy_pass        $upstream_web_protege;
+ proxy_pass        $upstream_react_millegrilles;
+ # proxy_pass        $upstream_web_protege;
 
- proxy_set_header  X-Real-IP $remote_addr;
- proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- proxy_set_header  X-Forwarded-Proto $scheme;
+ #proxy_set_header  X-Real-IP $remote_addr;
+ #proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+ #proxy_set_header  X-Forwarded-Proto $scheme;
 
  # Support WSS
- proxy_set_header  Upgrade $http_upgrade;
- proxy_set_header  Connection $connection_upgrade;
- proxy_set_header  Host $host;
+ #proxy_set_header  Upgrade $http_upgrade;
+ #proxy_set_header  Connection $connection_upgrade;
+ #proxy_set_header  Host $host;
+
+ include /etc/nginx/conf.d/component_base.include;
 
  #gzip on;
+ #gzip_static on;
  #gzip_vary on;
  #gzip_proxied any;
  #gzip_comp_level 6;
@@ -175,8 +178,8 @@ location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-n
 
 # Support socket.io, proteger via auth plugin
 location = /millegrilles/socket.io/ {
-  # proxy_pass        $upstream_node_millegrilles;
-  proxy_pass        $upstream_web_protege;
+  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_web_protege;
 
   include /etc/nginx/conf.d/component_base_auth.include;
   # include /etc/nginx/conf.d/component_base.include;
@@ -184,8 +187,8 @@ location = /millegrilles/socket.io/ {
 
 # Application React - s'occupe de l'authentification (non protege)
 location /millegrilles {
-  # proxy_pass        $upstream_node_millegrilles;
-  proxy_pass        $upstream_web_protege;
+  proxy_pass        $upstream_node_millegrilles;
+  # proxy_pass        $upstream_web_protege;
 
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;

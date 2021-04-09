@@ -14,12 +14,6 @@ proxy_set_header  User-Securite     $auth_user_securite;
 proxy_set_header  Auth-Primaire     $auth_auth_primaire;
 proxy_set_header  Auth-Secondaire   $auth_auth_secondaire;
 
-# proxy_set_header  Est-Proprietaire  $auth_proprietaire;
-# proxy_set_header  User-Prive        $auth_user_prive;
-# proxy_set_header  Idmg-Serveur      $auth_idmg_serveur;
-# proxy_set_header  Idmg-Compte       $auth_idmg_compte;
-# proxy_set_header  Idmgs-Actifs      $auth_idmgs_actifs;
-
 # Transmettre information SSL client si disponible
 proxy_set_header VERIFIED           $ssl_client_verify;
 proxy_set_header X-Client-Issuer-DN $ssl_client_i_dn;
@@ -27,3 +21,15 @@ proxy_set_header X-Client-Cert      $ssl_client_cert;
 proxy_set_header DN                 $ssl_client_s_dn;
 
 proxy_read_timeout 86400;
+
+gzip on;
+gzip_static on;
+gzip_vary on;
+gzip_proxied any;
+gzip_comp_level 6;
+gzip_buffers 16 8k;
+gzip_http_version 1.1;
+gzip_types text/plain
+           text/css
+           application/json application/javascript text/javascript
+           text/xml application/xml application/xml+rss;
