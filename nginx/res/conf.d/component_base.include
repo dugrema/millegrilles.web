@@ -32,4 +32,5 @@ gzip_http_version 1.1;
 gzip_types text/plain
            text/css
            application/json application/javascript text/javascript
-           text/xml application/xml application/xml+rss;
+           text/xml application/xml application/xml+rss
+           application/x-font-otf application/x-font-ttf application/x-font-woff;
