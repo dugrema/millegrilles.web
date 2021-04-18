@@ -1,8 +1,5 @@
 resolver 192.168.2.1 valid=30s;
 
-set $upstream_web_protege   https://192.168.2.131:1443;
-# set $upstream_web_protege   https://192.168.2.131:3000;
-
 # Remplacer les proxy_pass des modules a tester
 
 set $upstream_monitor   http://mg-dev4:8080;
@@ -14,13 +11,13 @@ set $upstream_node_coupdoeil      https://192.168.2.131:3003;
 set $upstream_react_coupdoeil     https://192.168.2.131:3003;   # 3004
 
 set $upstream_node_publication    https://192.168.2.131:3023;
-set $upstream_react_publication   https://192.168.2.131:3023;   # 3024
+set $upstream_react_publication   https://192.168.2.131:3024;   # 3024
 
 set $upstream_node_vitrine        https://192.168.2.131:3025;
 set $upstream_react_vitrine       https://192.168.2.131:3026;
 
 set $upstream_node_senseurspassifs  https://192.168.2.131:3013;
-set $upstream_react_senseurspassifs https://192.168.2.131:3013;  # 3014
+set $upstream_react_senseurspassifs https://192.168.2.131:3014;  # 3014
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
@@ -29,7 +26,7 @@ set $upstream_react_grosfichiers  https://192.168.2.131:3015;  # 3016
 set $upstream_node_fichiers       https://mg-dev4:3021;
 
 set $upstream_node_place          https://192.168.2.131:3027;
-set $upstream_react_place         https://192.168.2.131:3028;
+set $upstream_react_place         https://192.168.2.131:3027;  # 3028
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
 
@@ -110,7 +107,6 @@ location /backup {
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
 location = /millegrilles/authentification/verifier {
   proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
 
   proxy_pass_request_body off; # no need to send the POST body
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
@@ -123,7 +119,6 @@ location = /millegrilles/authentification/verifier {
 
 location = /millegrilles/authentification/verifier_public {
   proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
 
   proxy_pass_request_body off; # no need to send the POST body
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
@@ -137,7 +132,6 @@ location = /millegrilles/authentification/verifier_public {
 # Authentification par usager autre que proprietaire
 location = /millegrilles/authentification/verifierUsager {
   proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
 
   proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
@@ -153,7 +147,6 @@ location = /millegrilles/authentification/verifierUsager {
 # /millegrilles/static/*
 location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static/)) {
  proxy_pass        $upstream_react_millegrilles;
- # proxy_pass        $upstream_web_protege;
 
  #proxy_set_header  X-Real-IP $remote_addr;
  #proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -179,7 +172,6 @@ location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-n
 # Support socket.io, proteger via auth plugin
 location = /millegrilles/socket.io/ {
   proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
 
   include /etc/nginx/conf.d/component_base_auth.include;
   # include /etc/nginx/conf.d/component_base.include;
@@ -188,31 +180,18 @@ location = /millegrilles/socket.io/ {
 # Application React - s'occupe de l'authentification (non protege)
 location /millegrilles {
   proxy_pass        $upstream_node_millegrilles;
-  # proxy_pass        $upstream_web_protege;
 
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
 }
 
-location ~ (^/coupdoeil$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+location ~ (^/coupdoeil/?$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
  proxy_pass        $upstream_react_coupdoeil;
- # proxy_pass        $upstream_web_protege;
-
  include /etc/nginx/conf.d/component_base_auth.include;
-
- #proxy_set_header  X-Real-IP $remote_addr;
- #proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- #proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- #proxy_set_header  Upgrade $http_upgrade;
- #proxy_set_header  Connection $connection_upgrade;
- #proxy_set_header  Host $host;
 }
 location /coupdoeil {
   proxy_pass        $upstream_node_coupdoeil;
-  # proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
@@ -225,13 +204,11 @@ location /coupdoeil {
 location ~ (^/publication$|^/publication/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
   # Protection via auth plugin
   proxy_pass        $upstream_react_publication;
-  # proxy_pass        $upstream_web_protege;
 
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 location /publication {
   proxy_pass        $upstream_node_publication;
-  # proxy_pass        $upstream_web_protege;
 
   include /etc/nginx/conf.d/component_base_auth.include;
 }
@@ -288,7 +265,6 @@ location /vitrine {
 # /grosfichiers/static/*
 location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
  proxy_pass        $upstream_react_grosfichiers;
- # proxy_pass        $upstream_web_protege;
 
  include /etc/nginx/conf.d/component_base_auth.include;
 
@@ -304,7 +280,6 @@ location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-
 }
 location /grosfichiers {
   proxy_pass        $upstream_node_grosfichiers;
-  # proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
@@ -313,24 +288,12 @@ location /grosfichiers {
 # /senseurspassifs/sock-js.node
 # /senseurspassifs/main.*
 # /senseurspassifs/static/*
-location ~ (^/senseurspassifs$|^/senseurspassifs/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+location ~ (^/senseurspassifs/?$|^/senseurspassifs/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
  proxy_pass        $upstream_react_senseurspassifs;
- # proxy_pass        $upstream_web_protege;
-
  include /etc/nginx/conf.d/component_base_auth.include;
-
- # proxy_set_header  X-Real-IP $remote_addr;
- # proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- # proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- # proxy_set_header  Upgrade $http_upgrade;
- # proxy_set_header  Connection $connection_upgrade;
- # proxy_set_header  Host $host;
 }
 location /senseurspassifs {
   proxy_pass        $upstream_node_senseurspassifs;
-  # proxy_pass        $upstream_web_protege;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
@@ -339,24 +302,14 @@ location /senseurspassifs {
 # /place/sock-js.node
 # /place/main.*
 # /place/static/*
-location ~ (^/place$|^/place/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- proxy_pass        $upstream_react_place;
- # proxy_pass        $upstream_web_protege;
-
- #proxy_set_header  X-Real-IP $remote_addr;
- #proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- #proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- #proxy_set_header  Upgrade $http_upgrade;
- #proxy_set_header  Connection $connection_upgrade;
- #proxy_set_header  Host $host;
-
- include /etc/nginx/conf.d/component_base_auth.include;
+#location ~ (^/place$|^/place/(forum|fichiers|sockjs-node|static|main\..*|.*\.hot-update.json)) {
+# proxy_pass   $upstream_react_place;
+# include /etc/nginx/conf.d/component_base_auth.include;
+#}
+location ~ /place/(forum|fichiers) {
+  rewrite ^(.*)$ /place/index.html;
 }
 location /place {
-  proxy_pass        $upstream_node_place;
-  # proxy_pass        $upstream_web_protege;
+  proxy_pass  $upstream_node_place;
   include /etc/nginx/conf.d/component_base_auth.include;
-  # include /etc/nginx/conf.d/component_base.include;
 }
