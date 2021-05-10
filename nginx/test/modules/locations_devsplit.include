@@ -219,27 +219,32 @@ location /publication {
 # /vitrine/main.*
 # /vitrine/static/*
 # NOTE : s'assurer que /var/opt/millegrilles est o+rx
-#location /vitrine/sites {
-#  alias /var/opt/millegrilles/nginx/data/vitrine/sites;
-#}
+location = /vitrine/index.json {
+  expires 0s;
+  root /var/opt/millegrilles/nginx/data;
+}
+location /vitrine/data {
+  expires 0s;
+  root /var/opt/millegrilles/nginx/data;
+}
 #location /vitrine/posts {
 #  alias /var/opt/millegrilles/nginx/data/vitrine/posts;
 #}
 #location /vitrine/collections {
 #  alias /var/opt/millegrilles/nginx/data/vitrine/collections;
 #}
-#location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json|locales)) {
-#  proxy_pass        $upstream_react_vitrine;
-#  # proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
-#  proxy_set_header  X-Real-IP $remote_addr;
-#  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-#  proxy_set_header  X-Forwarded-Proto $scheme;
-#
-#  # Support WSS
-#  proxy_set_header  Upgrade $http_upgrade;
-#  proxy_set_header  Connection $connection_upgrade;
-#  proxy_set_header  Host $host;
-#}
+location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json|locales)) {
+  proxy_pass        $upstream_react_vitrine;
+  # proxy_pass        https://mg-dev4.maple.maceroc.com:3008;
+  proxy_set_header  X-Real-IP $remote_addr;
+  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header  X-Forwarded-Proto $scheme;
+
+  # Support WSS
+  proxy_set_header  Upgrade $http_upgrade;
+  proxy_set_header  Connection $connection_upgrade;
+  proxy_set_header  Host $host;
+}
 #location /vitrine/section {
 #  # rewrite ^(.*)$ /vitrine/index.html;
 #  proxy_pass        $upstream_react_vitrine;
@@ -247,16 +252,14 @@ location /publication {
 #location = /vitrine/ {
 #  return 301 https://$http_host/vitrine;
 #}
-#location /vitrine {
-#  proxy_pass $upstream_node_vitrine;
-#  # proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
-#  include /etc/nginx/conf.d/component_base.include;
-#
-#  # Support WSS
-#  proxy_set_header  Upgrade $http_upgrade;
-#  proxy_set_header  Connection $connection_upgrade;
-#  proxy_set_header  Host $host;
-#}
+location /vitrine {
+  expires 0s;
+  proxy_pass $upstream_node_vitrine;
+  # proxy_pass        https://mg-dev4.maple.maceroc.com:3007;
+  include /etc/nginx/conf.d/component_base.include;
+  # add_header Cache-Control "public, max-age=0";
+  # etag on;
+}
 
 #location /vitrine {
 #  proxy_pass $upstream_react_vitrine;
@@ -265,10 +268,10 @@ location /publication {
 #location /vitrine/section {
 #  rewrite ^(.*)$ /vitrine/index.html;
 #}
-location /vitrine {
-  alias /var/opt/millegrilles/nginx/html/vitrine;
-  include /etc/nginx/conf.d/component_base.include;
-}
+#location /vitrine_site1 {
+#  alias /var/opt/millegrilles/nginx/html/vitrine;
+#  include /etc/nginx/conf.d/component_base.include;
+#}
 
 # Chargement de /grosfichiers via dev React
 # /grosfichiers
@@ -327,6 +330,7 @@ location /place {
 }
 
 location /site1 {
+  expires 0s;
   alias /var/opt/millegrilles/nginx/html/site1;
   include /etc/nginx/conf.d/component_base.include;
   include /etc/nginx/conf.d/component_cors.include;
