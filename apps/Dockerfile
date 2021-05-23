@@ -4,7 +4,8 @@ ENV MG_CONSIGNATION_HTTP=https://fichiers \
     APP_FOLDER=/usr/src/app \
     NODE_ENV=production \
     PORT=443 \
-    MG_MQ_URL=amqps://mq:5673
+    MQ_HOST=mq \
+    MQ_PORT=5673
 
 EXPOSE 80 443
 
