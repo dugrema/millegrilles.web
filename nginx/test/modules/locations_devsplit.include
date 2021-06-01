@@ -11,7 +11,7 @@ set $upstream_node_coupdoeil      https://192.168.2.131:3003;
 set $upstream_react_coupdoeil     https://192.168.2.131:3003;   # 3004
 
 set $upstream_node_publication    https://192.168.2.131:3023;
-set $upstream_react_publication   https://192.168.2.131:3023;   # 3024
+set $upstream_react_publication   https://192.168.2.131:3024;   # 3024
 
 set $upstream_node_vitrine        https://192.168.2.131:3025;
 set $upstream_react_vitrine       https://192.168.2.131:3026;   # 3026
@@ -26,7 +26,7 @@ set $upstream_react_grosfichiers  https://192.168.2.131:3015;  # 3016
 set $upstream_node_fichiers       https://mg-dev4:3021;
 
 set $upstream_node_place          https://192.168.2.131:3027;
-set $upstream_react_place         https://192.168.2.131:3027;  # 3028
+set $upstream_react_place         https://192.168.2.131:3028;  # 3028
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
 
@@ -58,7 +58,7 @@ location /fichiers/public3 {
   rewrite ^/fichiers/(public/.*)$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1 redirect;
 }
 
-location /fichiers {
+location /fichiers/public {
   slice  5m;
 
   proxy_cache       cache_fichiers;
@@ -87,6 +87,37 @@ location /fichiers {
   # include /etc/nginx/conf.d/component_base_auth.include;
   include /etc/nginx/conf.d/auth_public.include;
   include /etc/nginx/conf.d/component_base.include;
+}
+
+location /fichiers {
+  slice  5m;
+
+  proxy_cache       cache_fichiers;
+  proxy_cache_lock  on;
+  proxy_cache_background_update on;
+
+  proxy_cache_key   $uri$is_args$args$slice_range;
+  proxy_set_header  Range $slice_range;
+  proxy_cache_valid 200 206 1d;
+
+  proxy_cache_use_stale error timeout updating
+                        http_500 http_502 http_503 http_504;
+
+  #proxy_headers_hash_bucket_size 64;
+
+  proxy_pass        $upstream_node_fichiers;
+
+  # Mapping certificat client pour connexion consignationfichiers
+  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
+  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
+
+  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  proxy_ssl_verify       on;
+  proxy_ssl_verify_depth 1;
+
+  include /etc/nginx/conf.d/component_base_auth.include;
+  # include /etc/nginx/conf.d/auth_public.include;
+  # include /etc/nginx/conf.d/component_base.include;
 }
 
 location /backup {
@@ -324,13 +355,13 @@ location /senseurspassifs {
 # /place/sock-js.node
 # /place/main.*
 # /place/static/*
-#location ~ (^/place$|^/place/(forum|fichiers|sockjs-node|static|main\..*|.*\.hot-update.json)) {
-# proxy_pass   $upstream_react_place;
-# include /etc/nginx/conf.d/component_base_auth.include;
-#}
-location ~ /place/(forum|fichiers) {
-  rewrite ^(.*)$ /place/index.html;
+location ~ (^/place$|^/place/(forum|fichiers|sockjs-node|static|main\..*|.*\.hot-update.json)) {
+ proxy_pass   $upstream_react_place;
+ include /etc/nginx/conf.d/component_base_auth.include;
 }
+#location ~ /place/(forum|fichiers) {
+#  rewrite ^(.*)$ /place/index.html;
+#}
 location /place {
   proxy_pass  $upstream_node_place;
   include /etc/nginx/conf.d/component_base_auth.include;
