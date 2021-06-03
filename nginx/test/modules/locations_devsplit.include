@@ -115,9 +115,9 @@ location /fichiers {
   proxy_ssl_verify       on;
   proxy_ssl_verify_depth 1;
 
-  include /etc/nginx/conf.d/component_base_auth.include;
-  # include /etc/nginx/conf.d/auth_public.include;
-  # include /etc/nginx/conf.d/component_base.include;
+  # include /etc/nginx/conf.d/component_base_auth.include;
+  include /etc/nginx/conf.d/auth_public.include;
+  include /etc/nginx/conf.d/component_base.include;
 }
 
 location /backup {
@@ -355,7 +355,7 @@ location /senseurspassifs {
 # /place/sock-js.node
 # /place/main.*
 # /place/static/*
-location ~ (^/place$|^/place/(forum|fichiers|sockjs-node|static|main\..*|.*\.hot-update.json)) {
+location ~ (^/place$|^/place/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
  proxy_pass   $upstream_react_place;
  include /etc/nginx/conf.d/component_base_auth.include;
 }
