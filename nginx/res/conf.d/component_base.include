@@ -8,11 +8,9 @@ proxy_set_header  Connection  $connection_upgrade;
 proxy_set_header  Host        $host;
 
 # Header auth pour s'assurer que le compte est celui du proprietaire de la MilleGrille
-proxy_set_header  User-Name         $auth_user_name;
-proxy_set_header  User-Id           $auth_user_id;
-proxy_set_header  User-Securite     $auth_user_securite;
-proxy_set_header  Auth-Primaire     $auth_auth_primaire;
-proxy_set_header  Auth-Secondaire   $auth_auth_secondaire;
+proxy_set_header  X-User-Name       $auth_x_user_name;
+proxy_set_header  X-User-Id         $auth_x_user_id;
+proxy_set_header  X-User-AuthScore  $auth_x_user_authscore;
 
 # Transmettre information SSL client si disponible
 proxy_set_header VERIFIED           $ssl_client_verify;
