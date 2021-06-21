@@ -92,6 +92,13 @@ location /fichiers {
   include /etc/nginx/conf.d/component_cors.include;
 }
 
+# Utiliser cette location pour un noeud prive ou public
+# Agit comme reverse-proxy pour distribuer les fichiers
+#location /fichiers {
+#  include /etc/nginx/conf.d/auth_public.include;
+#  rewrite ^/fichiers/(.*)$ /fichiers_transfert/$1 last;
+#}
+
 location /fichiers_transfert {
   #proxy_headers_hash_bucket_size 64;
 
@@ -108,7 +115,7 @@ location /fichiers_transfert {
   #  proxy_ssl_verify_depth 1;
 
   # include /etc/nginx/conf.d/component_base_auth.include;
-  # include /etc/nginx/conf.d/auth_sslclient.include;
+  # include /etc/nginx/conf.d/auth_public.include;
   include /etc/nginx/conf.d/component_base.include;
   include /etc/nginx/conf.d/component_cors.include;
 }
