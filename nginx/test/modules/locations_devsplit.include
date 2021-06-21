@@ -5,16 +5,16 @@ resolver 192.168.2.1 valid=30s;
 set $upstream_monitor   http://192.168.2.131:8280;
 
 set $upstream_node_millegrilles   https://192.168.2.131:3001;
-set $upstream_react_millegrilles  https://192.168.2.131:3001;   # 3002 separe
+set $upstream_react_millegrilles  https://192.168.2.131:3002;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.131:3003;
 set $upstream_react_coupdoeil     https://192.168.2.131:3003;   # 3004
 
 set $upstream_node_publication    https://192.168.2.131:3023;
-set $upstream_react_publication   https://192.168.2.131:3024;   # 3024
+set $upstream_react_publication   https://192.168.2.131:3023;   # 3024
 
 set $upstream_node_vitrine        https://192.168.2.131:3025;
-set $upstream_react_vitrine       https://192.168.2.131:3026;   # 3026
+set $upstream_react_vitrine       https://192.168.2.131:3025;   # 3026
 
 set $upstream_node_senseurspassifs  https://192.168.2.131:3013;
 set $upstream_react_senseurspassifs https://192.168.2.131:3014;  # 3014
@@ -22,8 +22,8 @@ set $upstream_react_senseurspassifs https://192.168.2.131:3014;  # 3014
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
 set $upstream_node_grosfichiers   https://192.168.2.131:3015;
-set $upstream_react_grosfichiers  https://192.168.2.131:3016;  # 3016
-set $upstream_node_fichiers       https://mg-dev4:3021;
+set $upstream_react_grosfichiers  https://192.168.2.131:3015;  # 3016
+set $upstream_node_fichiers       https://192.168.2.131:3021;
 
 set $upstream_node_place          https://192.168.2.131:3027;
 set $upstream_react_place         https://192.168.2.131:3028;  # 3028
@@ -58,40 +58,14 @@ location /fichiers/public3 {
   rewrite ^/fichiers/(public/.*)$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1 redirect;
 }
 
-location /fichiers/public {
-  slice  5m;
-
-  proxy_cache       cache_fichiers;
-  proxy_cache_lock  on;
-  proxy_cache_background_update on;
-
-  proxy_cache_key   $uri$is_args$args$slice_range;
-  proxy_set_header  Range $slice_range;
-  proxy_cache_valid 200 206 1d;
-
-  proxy_cache_use_stale error timeout updating
-                        http_500 http_502 http_503 http_504;
-
-  #proxy_headers_hash_bucket_size 64;
-
-  proxy_pass        $upstream_node_fichiers;
-
-  # Mapping certificat client pour connexion consignationfichiers
-  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
-  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
-
-  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
-  proxy_ssl_verify       on;
-  proxy_ssl_verify_depth 1;
-
-  # include /etc/nginx/conf.d/component_base_auth.include;
-  include /etc/nginx/conf.d/auth_public.include;
-  include /etc/nginx/conf.d/component_base.include;
-}
-
 location /fichiers {
   slice  5m;
 
+  #proxy_headers_hash_bucket_size 64;
+
+  proxy_pass        $upstream_node_fichiers;
+  proxy_connect_timeout 1s;
+
   proxy_cache       cache_fichiers;
   proxy_cache_lock  on;
   proxy_cache_background_update on;
@@ -103,21 +77,40 @@ location /fichiers {
   proxy_cache_use_stale error timeout updating
                         http_500 http_502 http_503 http_504;
 
+  # Mapping certificat client pour connexion consignationfichiers
+  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
+  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
+
+# Pas de verif ssl de nodejs pour dev local - cert brise
+#  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+#  proxy_ssl_verify       on;
+#  proxy_ssl_verify_depth 1;
+
+  # include /etc/nginx/conf.d/component_base_auth.include;
+  include /etc/nginx/conf.d/auth_public.include;
+  include /etc/nginx/conf.d/component_base.include;
+  include /etc/nginx/conf.d/component_cors.include;
+}
+
+location /fichiers_transfert {
   #proxy_headers_hash_bucket_size 64;
 
   proxy_pass        $upstream_node_fichiers;
+  proxy_connect_timeout 1s;
 
   # Mapping certificat client pour connexion consignationfichiers
   proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
   proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
 
-  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
-  proxy_ssl_verify       on;
-  proxy_ssl_verify_depth 1;
+  # Pas de verif ssl de nodejs pour dev local - cert brise
+  #  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  #  proxy_ssl_verify       on;
+  #  proxy_ssl_verify_depth 1;
 
   # include /etc/nginx/conf.d/component_base_auth.include;
-  include /etc/nginx/conf.d/auth_public.include;
+  # include /etc/nginx/conf.d/auth_sslclient.include;
   include /etc/nginx/conf.d/component_base.include;
+  include /etc/nginx/conf.d/component_cors.include;
 }
 
 location /backup {

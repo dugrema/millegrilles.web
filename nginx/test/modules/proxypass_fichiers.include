@@ -1,0 +1,2 @@
+# Timeout court en mode local, regle probleme d'attente de fichiers sans raison
+proxy_connect_timeout 1s;
