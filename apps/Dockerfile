@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:16
 
 ENV MG_CONSIGNATION_HTTP=https://fichiers \
     APP_FOLDER=/usr/src/app \

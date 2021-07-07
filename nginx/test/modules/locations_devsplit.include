@@ -5,7 +5,7 @@ resolver 192.168.2.1 valid=30s;
 set $upstream_monitor   http://192.168.2.131:8280;
 
 set $upstream_node_millegrilles   https://192.168.2.131:3001;
-set $upstream_react_millegrilles  https://192.168.2.131:3002;   # 3002 separe
+set $upstream_react_millegrilles  https://192.168.2.131:3001;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.131:3003;
 set $upstream_react_coupdoeil     https://192.168.2.131:3003;   # 3004
@@ -22,7 +22,7 @@ set $upstream_react_senseurspassifs https://192.168.2.131:3014;  # 3014
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
 set $upstream_node_grosfichiers   https://192.168.2.131:3015;
-set $upstream_react_grosfichiers  https://192.168.2.131:3015;  # 3016
+set $upstream_react_grosfichiers  https://192.168.2.131:3016;  # 3016
 set $upstream_node_fichiers       https://192.168.2.131:3021;
 
 set $upstream_node_place          https://192.168.2.131:3027;
