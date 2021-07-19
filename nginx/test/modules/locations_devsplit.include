@@ -5,13 +5,13 @@ resolver 192.168.2.1 valid=30s;
 set $upstream_monitor   http://192.168.2.131:8280;
 
 set $upstream_node_millegrilles   https://192.168.2.131:3001;
-set $upstream_react_millegrilles  https://192.168.2.131:3002;   # 3002 separe
+set $upstream_react_millegrilles  https://192.168.2.131:3001;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.131:3003;
-set $upstream_react_coupdoeil     https://192.168.2.131:3004;   # 3004
+set $upstream_react_coupdoeil     https://192.168.2.131:3003;   # 3004
 
 set $upstream_node_publication    https://192.168.2.131:3023;
-set $upstream_react_publication   https://192.168.2.131:3023;   # 3024
+set $upstream_react_publication   https://192.168.2.131:3024;   # 3024
 
 set $upstream_node_vitrine        https://192.168.2.131:3025;
 set $upstream_react_vitrine       https://192.168.2.131:3025;   # 3026
