@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.webappbase",
-  "version": "1.44.1",
+  "version": "1.45.0",
   "description": "Base d'application webs pour MilleGrilles",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/dugrema/millegrilles.web#readme",
   "dependencies": {
-    "@dugrema/millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.44",
+    "@dugrema/millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.45",
     "authenticator": "^1.1.5",
     "cors": "^2.8.5",
     "debug": "^4.3.2",

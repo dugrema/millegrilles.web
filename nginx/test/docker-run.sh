@@ -1,5 +1,8 @@
 #!/bin/bash
 
+docker service scale nginx=0
+sleep 10
+
 source ../image_info.txt
 
 CONF_FOLDER=`pwd`/../res/conf.d
