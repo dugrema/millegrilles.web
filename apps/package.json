@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.webappbase",
-  "version": "1.45.0",
+  "version": "1.45.1",
   "description": "Base d'application webs pour MilleGrilles",
   "main": "index.js",
   "scripts": {
@@ -37,6 +37,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^27.2.0"
   }
 }

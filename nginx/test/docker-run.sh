@@ -1,6 +1,7 @@
 #!/bin/bash
 
 docker service scale nginx=0
+sudo systemctl stop 6tunnel_https
 sleep 10
 
 source ../image_info.txt
