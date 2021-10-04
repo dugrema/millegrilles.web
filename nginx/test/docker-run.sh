@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sudo systemctl stop 6tunnel_https
+sudo killall 6tunnel
+
 docker service scale nginx=0
 sudo systemctl stop 6tunnel_https
 sleep 10
