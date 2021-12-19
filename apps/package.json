@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.webappbase",
-  "version": "1.45.1",
+  "version": "1.47.0",
   "description": "Base d'application webs pour MilleGrilles",
   "main": "index.js",
   "scripts": {
@@ -23,8 +23,8 @@
     "@dugrema/millegrilles.common": "git+ssh://git.maceroc.com/git/millegrilles.common.nodejs#1.45",
     "authenticator": "^1.1.5",
     "cors": "^2.8.5",
-    "debug": "^4.3.2",
-    "express": "^4.17.1",
+    "debug": "^4.3.3",
+    "express": "^4.17.2",
     "express-session": "^1.17.2",
     "express-socket.io-session": "^1.3.5",
     "fido2-lib": "git+ssh://git.maceroc.com/git/fido2-lib",
@@ -33,10 +33,10 @@
     "node-forge": "^0.10.0",
     "pbkdf2": "^3.1.2",
     "randombytes": "^2.1.0",
-    "redis": "^3.1.2",
+    "redis": "~3.1.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "^27.2.0"
+    "jest": "^27.4.5"
   }
 }
