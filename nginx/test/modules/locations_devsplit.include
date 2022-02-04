@@ -2,33 +2,48 @@ resolver 192.168.2.1 valid=30s;
 
 # Remplacer les proxy_pass des modules a tester
 
-set $upstream_monitor   http://192.168.2.131:8280;
+set $upstream_monitor             http://192.168.2.196:8280;
+set $upstream_certissuer          http://192.168.2.196:8380;
 
-set $upstream_node_millegrilles   https://192.168.2.131:3001;
-set $upstream_react_millegrilles  https://192.168.2.131:3001;   # 3002 separe
+set $upstream_node_millegrilles   https://192.168.2.196:3001;
+set $upstream_react_millegrilles  https://192.168.2.196:3001;   # 3002 separe
 
-set $upstream_node_coupdoeil      https://192.168.2.131:3003;
-set $upstream_react_coupdoeil     https://192.168.2.131:3003;   # 3004
+set $upstream_node_coupdoeil      https://192.168.2.196:3003;
+set $upstream_react_coupdoeil     https://192.168.2.196:3003;   # 3004
 
-set $upstream_node_publication    https://192.168.2.131:3023;
-set $upstream_react_publication   https://192.168.2.131:3024;   # 3024
+# set $upstream_node_publication    https://192.168.2.196:3023;
+# set $upstream_react_publication   https://192.168.2.196:3024;   # 3024
 
-set $upstream_node_vitrine        https://192.168.2.131:3025;
-set $upstream_react_vitrine       https://192.168.2.131:3025;   # 3026
+set $upstream_node_vitrine        https://192.168.2.196:3025;
+set $upstream_react_vitrine       https://192.168.2.196:3025;   # 3026
 
-set $upstream_node_senseurspassifs  https://192.168.2.131:3013;
-set $upstream_react_senseurspassifs https://192.168.2.131:3014;  # 3014
+set $upstream_node_senseurspassifs  https://192.168.2.196:3013;
+set $upstream_react_senseurspassifs https://192.168.2.196:3013;  # 3014
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
-set $upstream_node_grosfichiers   https://192.168.2.131:3015;
-set $upstream_react_grosfichiers  https://192.168.2.131:3015;  # 3016
-set $upstream_node_fichiers       https://192.168.2.131:3021;
+set $upstream_node_grosfichiers   https://192.168.2.196:3015;
+set $upstream_react_grosfichiers  https://192.168.2.196:3015;  # 3016
+set $upstream_node_fichiers       https://192.168.2.196:3021;
 
-set $upstream_node_place          https://192.168.2.131:3027;
-set $upstream_react_place         https://192.168.2.131:3028;  # 3028
+set $upstream_node_place          https://192.168.2.196:3027;
+set $upstream_react_place         https://192.168.2.196:3028;  # 3028
+
+set $upstream_react_commondm      https://192.168.2.196:3032;
+
+set $upstream_react_reactjs       https://192.168.2.196:3036;  # 3036
+
+set $upstream_node_collections    https://192.168.2.196:3037;
+set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
+
+# set $upstream_rabbitmq            https://192.168.2.196:8443;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
+
+# MQ
+#location /rabbitmq {
+#
+#}
 
 # Monitor
 location /test {
@@ -44,6 +59,12 @@ location /administration {
 # Monitor
 location /installation {
   proxy_pass        $upstream_monitor;
+  include /etc/nginx/conf.d/component_base.include;
+}
+
+# Monitor
+location /certissuer {
+  proxy_pass        $upstream_certissuer;
   include /etc/nginx/conf.d/component_base.include;
 }
 
@@ -127,9 +148,9 @@ location /backup {
   proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
   proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
 
-  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
-  proxy_ssl_verify       on;
-  proxy_ssl_verify_depth 1;
+  #proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  #proxy_ssl_verify       on;
+  #proxy_ssl_verify_depth 1;
 
   include /etc/nginx/conf.d/component_base_auth.include;
 }
@@ -140,7 +161,7 @@ location = /millegrilles/authentification/verifier {
   proxy_pass        $upstream_node_millegrilles;
 
   proxy_pass_request_body off; # no need to send the POST body
-  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  #proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
   proxy_set_header  Content-Length "";
   proxy_set_header  X-Real-IP $remote_addr;
@@ -152,7 +173,7 @@ location = /millegrilles/authentification/verifier_public {
   proxy_pass        $upstream_node_millegrilles;
 
   proxy_pass_request_body off; # no need to send the POST body
-  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  #proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
   proxy_set_header  Content-Length "";
   proxy_set_header  X-Real-IP $remote_addr;
@@ -164,7 +185,7 @@ location = /millegrilles/authentification/verifier_public {
 location = /millegrilles/authentification/verifierUsager {
   proxy_pass        $upstream_node_millegrilles;
 
-  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  #proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
 
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -232,17 +253,17 @@ location /coupdoeil {
 # /publication/sock-js.node
 # /publication/main.*
 # /publication/static/*
-location ~ (^/publication/?$|^/publication/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
-  # Protection via auth plugin
-  proxy_pass        $upstream_react_publication;
-
-  include /etc/nginx/conf.d/component_base_auth.include;
-}
-location /publication {
-  proxy_pass        $upstream_node_publication;
-
-  include /etc/nginx/conf.d/component_base_auth.include;
-}
+#location ~ (^/publication/?$|^/publication/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+#  # Protection via auth plugin
+#  proxy_pass        $upstream_react_publication;
+#
+#  include /etc/nginx/conf.d/component_base_auth.include;
+#}
+#location /publication {
+#  proxy_pass        $upstream_node_publication;
+#
+#  include /etc/nginx/conf.d/component_base_auth.include;
+#}
 
 # Chargement de /vitrine via dev React
 # /vitrine
@@ -365,6 +386,34 @@ location ~ (^/place$|^/place/(sockjs-node|static|main\..*|.*\.hot-update.json)) 
 location /place {
   proxy_pass  $upstream_node_place;
   include /etc/nginx/conf.d/component_base_auth.include;
+}
+
+# Chargement de /collections via dev React
+# /collections
+# /collections/sock-js.node
+# /collections/main.*
+# /collections/static/*
+location ~ (^/collections$|^/collections/(sockjs-node|static|main\..*|.*\.hot-update.json|.*\.module\.wasm)) {
+# location /collections {
+ proxy_pass  $upstream_react_collections;
+
+ include /etc/nginx/conf.d/component_base_auth.include;
+
+ # Support WSS
+ proxy_set_header  Host $host;
+}
+location /collections {
+  proxy_pass $upstream_node_collections;
+  include /etc/nginx/conf.d/component_base_auth.include;
+}
+
+location /reactjs {
+ proxy_pass  $upstream_react_reactjs;
+
+ include /etc/nginx/conf.d/component_base_auth.include;
+
+ # Support WSS
+ proxy_set_header  Host $host;
 }
 
 location /site1/fichiers {

@@ -5,14 +5,16 @@
 #ssl_certificate       /certs_mg/pki.nginx.cert;
 #ssl_certificate_key   /certs_mg/pki.nginx.key;
 
-ssl_certificate       /certs/mg-dev4.maple.maceroc.com/fullchain.cer;
-ssl_certificate_key   /certs/mg-dev4.maple.maceroc.com/mg-dev4.maple.maceroc.com.key;
+#ssl_certificate       /certs/mg-dev4.maple.maceroc.com/fullchain.cer;
+#ssl_certificate_key   /certs/mg-dev4.maple.maceroc.com/mg-dev4.maple.maceroc.com.key;
+ssl_certificate       /certs/mg-dev5.maple.maceroc.com/fullchain.cer;
+ssl_certificate_key   /certs/mg-dev5.maple.maceroc.com/mg-dev5.maple.maceroc.com.key;
 
 # OCSP stapling
 ssl_stapling          off;
 ssl_stapling_verify   off;
 
 # Client side verification
-ssl_client_certificate /certs_mg/pki.millegrille;
-ssl_verify_client      optional;
-ssl_verify_depth       1;
+#ssl_client_certificate /certs_mg/pki.millegrille;
+#ssl_verify_client      optional;
+#ssl_verify_depth       1;
