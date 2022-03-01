@@ -29,4 +29,5 @@ docker run --rm -it \
   -v acmesh-data:/certs \
   -v /home/mathieu/mgdev/certs:/certs_mg \
   -v $MILLEGRILLES_FOLDER:$MILLEGRILLES_FOLDER \
+  -v $MILLEGRILLES_FOLDER/nginx/html:/usr/share/nginx/files \
   $IMAGE_DOCKER
