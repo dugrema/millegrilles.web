@@ -23,7 +23,7 @@ set $upstream_react_senseurspassifs https://192.168.2.196:3013;  # 3014
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
 set $upstream_node_grosfichiers   https://192.168.2.196:3015;
-set $upstream_react_grosfichiers  https://192.168.2.196:3015;  # 3016
+set $upstream_react_grosfichiers  https://192.168.2.196:3016;  # 3016
 set $upstream_node_fichiers       https://192.168.2.196:3021;
 
 set $upstream_node_place          https://192.168.2.196:3027;
@@ -36,9 +36,21 @@ set $upstream_react_reactjs       https://192.168.2.196:3036;  # 3036
 set $upstream_node_collections    https://192.168.2.196:3037;
 set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
 
+set $upstream_node_messagerie     https://192.168.2.196:3039;
+set $upstream_react_messagerie    https://192.168.2.196:3040;  # 3040
+
 # set $upstream_rabbitmq            https://192.168.2.196:8443;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
+
+location /fiche.json {
+  gzip on;
+  gzip_static on;
+  gzip_types application/json;
+
+  root /usr/share/nginx/files;
+  include /etc/nginx/conf.d/component_cors.include;
+}
 
 # MQ
 #location /rabbitmq {
@@ -404,6 +416,21 @@ location ~ (^/collections$|^/collections/(sockjs-node|static|main\..*|.*\.hot-up
 }
 location /collections {
   proxy_pass $upstream_node_collections;
+  include /etc/nginx/conf.d/component_base_auth.include;
+}
+
+# Chargement de /collections via dev React
+# /messagerie
+location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-update.json|.*\.module\.wasm)) {
+ proxy_pass  $upstream_react_messagerie;
+
+ include /etc/nginx/conf.d/component_base_auth.include;
+
+ # Support WSS
+ proxy_set_header  Host $host;
+}
+location /messagerie {
+  proxy_pass $upstream_node_messagerie;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
