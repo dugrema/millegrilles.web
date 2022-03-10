@@ -37,7 +37,7 @@ set $upstream_node_collections    https://192.168.2.196:3037;
 set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
 
 set $upstream_node_messagerie     https://192.168.2.196:3039;
-set $upstream_react_messagerie    https://192.168.2.196:3040;  # 3040
+set $upstream_react_messagerie    https://192.168.2.196:3039;  # 3040
 
 # set $upstream_rabbitmq            https://192.168.2.196:8443;
 
@@ -428,6 +428,10 @@ location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-upda
 
  # Support WSS
  proxy_set_header  Host $host;
+}
+location /messagerie/poster {
+  proxy_pass $upstream_node_messagerie;
+  include /etc/nginx/conf.d/component_base.include;
 }
 location /messagerie {
   proxy_pass $upstream_node_messagerie;
