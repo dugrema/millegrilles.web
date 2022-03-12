@@ -24,7 +24,7 @@ set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
 set $upstream_node_grosfichiers   https://192.168.2.196:3015;
 set $upstream_react_grosfichiers  https://192.168.2.196:3016;  # 3016
-set $upstream_node_fichiers       https://192.168.2.196:3021;
+set $upstream_node_fichiers       https://mg-dev5:3021;
 
 set $upstream_node_place          https://192.168.2.196:3027;
 set $upstream_react_place         https://192.168.2.196:3028;  # 3028
@@ -135,6 +135,11 @@ location /fichiers {
 location /fichiers_transfert {
   #proxy_headers_hash_bucket_size 64;
 
+  # Verification client side (externe - va dans server)
+  # ssl_client_certificate /certs_mg/pki.millegrille;
+  # ssl_verify_client      optional;
+  # ssl_verify_depth       1;
+
   proxy_pass        $upstream_node_fichiers;
   proxy_connect_timeout 1s;
 
@@ -142,10 +147,10 @@ location /fichiers_transfert {
   proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
   proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
 
-  # Pas de verif ssl de nodejs pour dev local - cert brise
-  #  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
-  #  proxy_ssl_verify       on;
-  #  proxy_ssl_verify_depth 1;
+  # Verif ssl interne (proxy)
+  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+  proxy_ssl_verify       on;
+  proxy_ssl_verify_depth 1;
 
   # include /etc/nginx/conf.d/component_base_auth.include;
   # include /etc/nginx/conf.d/auth_public.include;

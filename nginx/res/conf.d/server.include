@@ -9,8 +9,8 @@ server {
     include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
     include /etc/nginx/conf.d/ssl_params.conf.include;
 
-    # Max upload https protege
-    client_max_body_size 2G;
+    # Max upload https generique - override local
+    client_max_body_size 256K;
 
     # Composant authentification /millegrilles
     include /etc/nginx/conf.d/component_millegrilles.include;
