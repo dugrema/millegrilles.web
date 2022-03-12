@@ -1,4 +1,4 @@
-FROM nginx:1.18-alpine
+FROM nginx:1.21-alpine
 MAINTAINER Mathieu Dugre <mathieu.dugre@mdugre.info>
 
 ENV APP_BUNDLE_DIR=/opt/nginx/dist
