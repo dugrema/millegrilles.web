@@ -5,7 +5,7 @@ sudo killall 6tunnel
 
 docker service scale nginx=0
 sudo systemctl stop 6tunnel_https
-sleep 10
+#sleep 10
 
 source ../image_info.txt
 

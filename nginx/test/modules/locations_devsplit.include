@@ -6,7 +6,7 @@ set $upstream_monitor             http://192.168.2.196:8280;
 set $upstream_certissuer          http://192.168.2.196:8380;
 
 set $upstream_node_millegrilles   https://192.168.2.196:3001;
-set $upstream_react_millegrilles  https://192.168.2.196:3001;   # 3002 separe
+set $upstream_react_millegrilles  https://192.168.2.196:3002;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.196:3003;
 set $upstream_react_coupdoeil     https://192.168.2.196:3003;   # 3004
@@ -184,6 +184,8 @@ location = /millegrilles/authentification/verifier {
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
+  proxy_set_header  Host $host;
+  proxy_set_header  X-Hostname $hostname;
 }
 
 location = /millegrilles/authentification/verifier_public {
@@ -216,26 +218,12 @@ location = /millegrilles/authentification/verifierUsager {
 # /millegrilles/static/*
 location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static|.+\.hot-update.json$|/)) {
  proxy_pass        $upstream_react_millegrilles;
-
- #proxy_set_header  X-Real-IP $remote_addr;
- #proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- #proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- #proxy_set_header  Upgrade $http_upgrade;
- #proxy_set_header  Connection $connection_upgrade;
- #proxy_set_header  Host $host;
-
  include /etc/nginx/conf.d/component_base.include;
+}
 
- #gzip on;
- #gzip_static on;
- #gzip_vary on;
- #gzip_proxied any;
- #gzip_comp_level 6;
- #gzip_buffers 16 8k;
- #gzip_http_version 1.1;
- #gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+location /millegrilles/static {
+ proxy_pass        $upstream_react_millegrilles;
+ include /etc/nginx/conf.d/component_base.include;
 }
 
 # Support socket.io, proteger via auth plugin
@@ -253,6 +241,7 @@ location /millegrilles {
   proxy_set_header  X-Real-IP $remote_addr;
   proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header  X-Forwarded-Proto $scheme;
+  proxy_set_header  Host $host;
 }
 
 location ~ (^/coupdoeil/?$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
