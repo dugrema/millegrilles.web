@@ -6,5 +6,8 @@ auth_request_set  $auth_x_user_name        $upstream_http_x_user_name;
 auth_request_set  $auth_x_user_id          $upstream_http_x_user_id;
 auth_request_set  $auth_x_user_authscore   $upstream_http_x_user_authscore;
 
-proxy_set_header  Host        $host;
-proxy_set_header  X-Hostname  $hostname;
+proxy_set_header  Host              $host;
+proxy_set_header  X-Hostname        $hostname;
+proxy_set_header  X-User-Name       $auth_x_user_name;
+proxy_set_header  X-User-Id         $auth_x_user_id;
+proxy_set_header  X-User-AuthScore  $auth_x_user_authscore;

@@ -6,18 +6,16 @@ server {
 
     server_name _;  # Default server
 
-    include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
-    include /etc/nginx/conf.d/ssl_params.conf.include;
+    # include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
+    # include /etc/nginx/conf.d/ssl_params.conf.include;
 
-    # Max upload https generique - override local
-    client_max_body_size 256K;
+    ## Max upload https generique - override local
+    #client_max_body_size 5M;
 
-    # Composant authentification /millegrilles
-    include /etc/nginx/conf.d/component_millegrilles.include;
+    # Inclure les conf
+    include /etc/nginx/conf.d/modules/*.conf;
 
-    # Inclure les autres sites sous le noeud protege
-    include /etc/nginx/conf.d/modules/locations.include;
-    include /etc/nginx/conf.d/modules/*.app.location;
+    # Inclure les autres sites (locations)
+    include /etc/nginx/conf.d/modules/*.location;
 }
 
-include /etc/nginx/conf.d/modules/*.app.server;
