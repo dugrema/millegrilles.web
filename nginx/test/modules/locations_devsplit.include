@@ -27,7 +27,7 @@ set $upstream_react_grosfichiers  https://192.168.2.196:3016;  # 3016
 set $upstream_node_fichiers       https://mg-dev5:3021;
 
 set $upstream_node_place          https://192.168.2.196:3027;
-set $upstream_react_place         https://192.168.2.196:3028;  # 3028
+set $upstream_react_place         https://192.168.2.196:3027;  # 3028
 
 set $upstream_react_commondm      https://192.168.2.196:3032;
 
