@@ -34,7 +34,7 @@ set $upstream_react_commondm      https://192.168.2.196:3032;
 set $upstream_react_reactjs       https://192.168.2.196:3036;  # 3036
 
 set $upstream_node_collections    https://192.168.2.196:3037;
-set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
+set $upstream_react_collections   https://192.168.2.196:3038;  # 3038
 
 set $upstream_node_messagerie     https://192.168.2.196:3039;
 set $upstream_react_messagerie    https://192.168.2.196:3039;  # 3040
@@ -120,9 +120,12 @@ location /fichiers {
 #  proxy_ssl_verify_depth 1;
 
   # include /etc/nginx/conf.d/component_base_auth.include;
-  include /etc/nginx/conf.d/auth_public.include;
-  include /etc/nginx/conf.d/component_base.include;
-  include /etc/nginx/conf.d/component_cors.include;
+  #include /etc/nginx/conf.d/component_base.include;
+  #include /etc/nginx/conf.d/component_cors.include;
+
+  # include /etc/nginx/conf.d/auth_public.include;
+  include /etc/nginx/conf.d/component_fichiers.include;
+
 }
 
 # Utiliser cette location pour un noeud prive ou public
@@ -154,8 +157,9 @@ location /fichiers_transfert {
 
   # include /etc/nginx/conf.d/component_base_auth.include;
   # include /etc/nginx/conf.d/auth_public.include;
-  include /etc/nginx/conf.d/component_base.include;
-  include /etc/nginx/conf.d/component_cors.include;
+  # include /etc/nginx/conf.d/component_base.include;
+  # include /etc/nginx/conf.d/component_cors.include;
+  include /etc/nginx/conf.d/component_fichiers.include;
 }
 
 location /backup {
