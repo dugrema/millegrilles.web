@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/dugrema/millegrilles.web#readme",
   "dependencies": {
-    "@dugrema/millegrilles.nodejs": "github:dugrema/millegrilles.nodejs#2022.2"
+    "@dugrema/millegrilles.nodejs": "github:dugrema/millegrilles.nodejs#2022.2",
+    "express": "^4.17.3"
   },
   "peerDependencies": {
     "@dugrema/millegrilles.utiljs": "github:dugrema/millegrilles.utiljs#2022.2",
