@@ -1,12 +1,9 @@
 {
   "name": "millegrilles.webappbase",
-  "version": "2022.1.0",
+  "version": "2022.2.0",
   "description": "Base d'application webs pour MilleGrilles",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run client\" \"npm run server\"",
-    "server": "node ./bin/www",
-    "client": "export WDS_SOCKET_PATH=/millegrilles/sockjs-node && node ./bin/start-client",
     "test": "node ./test/test.js"
   },
   "repository": {
@@ -14,29 +11,16 @@
     "url": "git+https://github.com/dugrema/millegrilles.web.git"
   },
   "author": "Mathieu Dugre",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dugrema/millegrilles.web/issues"
   },
   "homepage": "https://github.com/dugrema/millegrilles.web#readme",
   "dependencies": {
-    "@dugrema/millegrilles.utiljs": "github:dugrema/millegrilles.utiljs#2022.1",
-    "@dugrema/millegrilles.nodejs": "github:dugrema/millegrilles.nodejs#2022.1",
-    "@dugrema/node-forge": "github:dugrema/forge#ed25519",
-    "authenticator": "^1.1.5",
-    "cors": "^2.8.5",
-    "debug": "^4.3.3",
-    "express": "^4.17.3",
-    "express-session": "^1.17.2",
-    "express-socket.io-session": "^1.3.5",
-    "fido2-lib": "github:dugrema/fido2-lib",
-    "morgan": "^1.10.0",
-    "multibase": "^4.0.4",
-    "randombytes": "^2.1.0",
-    "redis": "~3.1.2",
-    "uuid": "^8.3.2"
+    "@dugrema/millegrilles.nodejs": "github:dugrema/millegrilles.nodejs#2022.2"
   },
-  "devDependencies": {
-    "jest": "^27.5.1"
+  "peerDependencies": {
+    "@dugrema/millegrilles.utiljs": "github:dugrema/millegrilles.utiljs#2022.2",
+    "@dugrema/node-forge": "github:dugrema/forge#ed25519"
   }
 }
