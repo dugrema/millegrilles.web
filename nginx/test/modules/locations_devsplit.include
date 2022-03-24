@@ -22,8 +22,6 @@ set $upstream_react_senseurspassifs https://192.168.2.196:3013;  # 3014
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
-set $upstream_node_grosfichiers   https://192.168.2.196:3015;
-set $upstream_react_grosfichiers  https://192.168.2.196:3015;  # 3016
 set $upstream_node_fichiers       https://mg-dev5:3021;
 
 set $upstream_node_place          https://192.168.2.196:3027;
@@ -37,7 +35,7 @@ set $upstream_node_collections    https://192.168.2.196:3037;
 set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
 
 set $upstream_node_messagerie     https://192.168.2.196:3039;
-set $upstream_react_messagerie    https://192.168.2.196:3040;  # 3040
+set $upstream_react_messagerie    https://192.168.2.196:3039;  # 3040
 
 # set $upstream_rabbitmq            https://192.168.2.196:8443;
 
@@ -91,78 +89,14 @@ location /fichiers/public3 {
   rewrite ^/fichiers/(public/.*)$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1 redirect;
 }
 
-location /fichiers {
-  slice  5m;
-
-  #proxy_headers_hash_bucket_size 64;
-
-  proxy_pass        $upstream_node_fichiers;
-  proxy_connect_timeout 1s;
-
-  proxy_cache       cache_fichiers;
-  proxy_cache_lock  on;
-  proxy_cache_background_update on;
-
-  proxy_cache_key   $uri$is_args$args$slice_range;
-  proxy_set_header  Range $slice_range;
-  proxy_cache_valid 200 206 1d;
-
-  proxy_cache_use_stale error timeout updating
-                        http_500 http_502 http_503 http_504;
-
-  # Mapping certificat client pour connexion consignationfichiers
-  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
-  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
-
-# Pas de verif ssl de nodejs pour dev local - cert brise
-#  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
-#  proxy_ssl_verify       on;
-#  proxy_ssl_verify_depth 1;
-
-  # include /etc/nginx/conf.d/component_base_auth.include;
-  #include /etc/nginx/conf.d/component_base.include;
-  #include /etc/nginx/conf.d/component_cors.include;
-
-  # include /etc/nginx/conf.d/auth_public.include;
+location /fichiers/ {
+  proxy_pass $upstream_node_fichiers;
+  include /etc/nginx/conf.d/auth.include;
   include /etc/nginx/conf.d/component_fichiers.include;
-
+  include /etc/nginx/conf.d/modules/proxy_tls.include;
 }
 
-# Utiliser cette location pour un noeud prive ou public
-# Agit comme reverse-proxy pour distribuer les fichiers
-#location /fichiers {
-#  include /etc/nginx/conf.d/auth_public.include;
-#  rewrite ^/fichiers/(.*)$ /fichiers_transfert/$1 last;
-#}
-
-location /fichiers_transfert {
-  #proxy_headers_hash_bucket_size 64;
-
-  # Verification client side (externe - va dans server)
-  # ssl_client_certificate /certs_mg/pki.millegrille;
-  # ssl_verify_client      optional;
-  # ssl_verify_depth       1;
-
-  proxy_pass        $upstream_node_fichiers;
-  proxy_connect_timeout 1s;
-
-  # Mapping certificat client pour connexion consignationfichiers
-  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
-  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
-
-  # Verif ssl interne (proxy)
-  proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
-  proxy_ssl_verify       on;
-  proxy_ssl_verify_depth 1;
-
-  # include /etc/nginx/conf.d/component_base_auth.include;
-  # include /etc/nginx/conf.d/auth_public.include;
-  # include /etc/nginx/conf.d/component_base.include;
-  # include /etc/nginx/conf.d/component_cors.include;
-  include /etc/nginx/conf.d/component_fichiers.include;
-}
-
-location /backup {
+location /backup/ {
   proxy_pass        $upstream_node_fichiers;
 
   # Mapping certificat client pour connexion consignationfichiers
@@ -190,6 +124,12 @@ location = /millegrilles/authentification/verifier {
   proxy_set_header  X-Forwarded-Proto $scheme;
   proxy_set_header  Host $host;
   proxy_set_header  X-Hostname $hostname;
+  proxy_set_header  Content-Length "";
+  
+  proxy_set_header VERIFIED           $ssl_client_verify;
+  proxy_set_header X-Client-Issuer-DN $ssl_client_i_dn;
+  proxy_set_header X-Client-Cert      $ssl_client_cert;
+  proxy_set_header DN                 $ssl_client_s_dn;  
 }
 
 location = /millegrilles/authentification/verifier_public {
@@ -342,31 +282,6 @@ location /vitrine {
 #  include /etc/nginx/conf.d/component_base.include;
 #}
 
-# Chargement de /grosfichiers via dev React
-# /grosfichiers
-# /grosfichiers/sock-js.node
-# /grosfichiers/main.*
-# /grosfichiers/static/*
-location ~ (^/grosfichiers$|^/grosfichiers/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
- proxy_pass        $upstream_react_grosfichiers;
-
- include /etc/nginx/conf.d/component_base_auth.include;
-
- #proxy_set_header  X-Real-IP $remote_addr;
- #proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
- #proxy_set_header  X-Forwarded-Proto $scheme;
-
- # Support WSS
- proxy_set_header  Upgrade $http_upgrade;
- proxy_set_header  Connection $connection_upgrade;
- proxy_set_header  Host $host;
-
-}
-location /grosfichiers {
-  proxy_pass        $upstream_node_grosfichiers;
-  include /etc/nginx/conf.d/component_base_auth.include;
-}
-
 # Chargement de /senseurspassifs via dev React
 # /senseurspassifs
 # /senseurspassifs/sock-js.node
@@ -405,16 +320,22 @@ location /place {
 # /collections/static/*
 location ~ (^/collections$|^/collections/(sockjs-node|static|main\..*|.*\.hot-update.json|.*\.module\.wasm)) {
 # location /collections {
- proxy_pass  $upstream_react_collections;
+  proxy_pass  $upstream_react_collections;
 
- include /etc/nginx/conf.d/component_base_auth.include;
+  include /etc/nginx/conf.d/component_base_auth.include;
 
- # Support WSS
- proxy_set_header  Host $host;
+  # Support WSS
+  proxy_set_header  Host $host;
 }
 location /collections {
   proxy_pass $upstream_node_collections;
-  include /etc/nginx/conf.d/component_base_auth.include;
+  # include /etc/nginx/conf.d/component_base_auth.include;
+  include /etc/nginx/conf.d/auth.include;
+
+  include /etc/nginx/conf.d/component_proxyheaders.include;
+  include /etc/nginx/conf.d/component_gzip.include;
+  proxy_read_timeout 120s;
+  client_max_body_size 5M;
 }
 
 # Chargement de /collections via dev React
@@ -436,25 +357,25 @@ location /messagerie {
   include /etc/nginx/conf.d/component_base_auth.include;
 }
 
-location /reactjs {
- proxy_pass  $upstream_react_reactjs;
+#location /reactjs {
+# proxy_pass  $upstream_react_reactjs;
+#
+# include /etc/nginx/conf.d/component_base_auth.include;
+#
+# # Support WSS
+# proxy_set_header  Host $host;
+#}
 
- include /etc/nginx/conf.d/component_base_auth.include;
+#location /site1/fichiers {
+#  expires 1y;
+#  root /var/opt/millegrilles/nginx/html;
+#  include /etc/nginx/conf.d/component_base.include;
+#  include /etc/nginx/conf.d/component_cors.include;
+#}
 
- # Support WSS
- proxy_set_header  Host $host;
-}
-
-location /site1/fichiers {
-  expires 1y;
-  root /var/opt/millegrilles/nginx/html;
-  include /etc/nginx/conf.d/component_base.include;
-  include /etc/nginx/conf.d/component_cors.include;
-}
-
-location /site1 {
-  expires 0s;
-  root /var/opt/millegrilles/nginx/html;
-  include /etc/nginx/conf.d/component_base.include;
-  include /etc/nginx/conf.d/component_cors.include;
-}
+#location /site1 {
+#  expires 0s;
+#  root /var/opt/millegrilles/nginx/html;
+#  include /etc/nginx/conf.d/component_base.include;
+#  include /etc/nginx/conf.d/component_cors.include;
+#}

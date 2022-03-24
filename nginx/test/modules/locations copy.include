@@ -1,0 +1,12 @@
+# Fontions de l'API d'authentification - DEV ONLY (inclus sous /millegrilles en prod)
+
+# Developpement avec apps sur ports locaux differents
+include /etc/nginx/conf.d/modules/locations_devsplit.include;
+
+# Testing avec millegrilles.web/millegrilles_web sur port 3000
+#include /etc/nginx/conf.d/modules/locations_docker.include;
+
+
+#include /etc/nginx/conf.d/modules/locations_staging.include;
+#include /etc/nginx/conf.d/modules/locations_prive_app.include;
+#include /etc/nginx/conf.d/modules/locations_dev_coupdoeil.include;

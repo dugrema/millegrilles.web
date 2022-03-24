@@ -1,0 +1,7 @@
+# Mapping certificat client pour connexion consignation fichiers
+proxy_ssl_certificate         /certs_mg/pki.nginx.cert;
+proxy_ssl_certificate_key     /certs_mg/pki.nginx.key;
+proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+
+proxy_ssl_verify       on;
+proxy_ssl_verify_depth 1;

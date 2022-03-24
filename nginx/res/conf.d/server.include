@@ -1,4 +1,3 @@
-# HTTPS server
 # Serveur https par defaut
 server {
     listen 443 ssl http2 default_server;
@@ -6,16 +5,9 @@ server {
 
     server_name _;  # Default server
 
-    # include /etc/nginx/conf.d/modules/ssl_certs.conf.include;
-    # include /etc/nginx/conf.d/ssl_params.conf.include;
-
-    ## Max upload https generique - override local
-    #client_max_body_size 5M;
-
     # Inclure les conf
     include /etc/nginx/conf.d/modules/*.conf;
 
     # Inclure les autres sites (locations)
     include /etc/nginx/conf.d/modules/*.location;
 }
-

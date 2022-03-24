@@ -1,0 +1,12 @@
+# Configuration du certificat/cle SSL
+ssl_certificate       /certs_mg/pki.nginx.cert;
+ssl_certificate_key   /certs_mg/pki.nginx.key;
+
+# OCSP stapling
+ssl_stapling          off;
+ssl_stapling_verify   off;
+
+# Client side verification
+ssl_client_certificate /certs_mg/pki.millegrille;
+ssl_verify_client      on;
+ssl_verify_depth       1;
