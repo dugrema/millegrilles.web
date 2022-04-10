@@ -9,13 +9,7 @@ set $upstream_node_millegrilles   https://192.168.2.196:3001;
 set $upstream_react_millegrilles  https://192.168.2.196:3001;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.196:3003;
-set $upstream_react_coupdoeil     https://192.168.2.196:3003;   # 3004
-
-# set $upstream_node_publication    https://192.168.2.196:3023;
-# set $upstream_react_publication   https://192.168.2.196:3024;   # 3024
-
-set $upstream_node_vitrine        https://192.168.2.196:3025;
-set $upstream_react_vitrine       https://192.168.2.196:3025;   # 3026
+set $upstream_react_coupdoeil     https://192.168.2.196:3004;   # 3004
 
 set $upstream_node_senseurspassifs  https://192.168.2.196:3013;
 set $upstream_react_senseurspassifs https://192.168.2.196:3013;  # 3014
@@ -160,7 +154,7 @@ location = /millegrilles/authentification/verifierUsager {
 # /millegrilles/sock-js.node
 # /millegrilles/main.*
 # /millegrilles/static/*
-location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static|.+\.hot-update.json$|/)) {
+location ~ (^/millegrilles/?$|^/millegrilles/index.html|^/millegrilles/(sockjs-node|main\..*|static|.+\.hot-update.json$|.*\.module\.wasm|/)) {
  proxy_pass        $upstream_react_millegrilles;
  include /etc/nginx/conf.d/component_base.include;
 }
@@ -188,7 +182,7 @@ location /millegrilles {
   proxy_set_header  Host $host;
 }
 
-location ~ (^/coupdoeil/?$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
+location ~ (^/coupdoeil/?$|^/coupdoeil/(sockjs-node|static|main\..*|.*\.hot-update.json|.*\.module\.wasm)) {
  proxy_pass        $upstream_react_coupdoeil;
  include /etc/nginx/conf.d/component_base_auth.include;
 }
@@ -196,91 +190,6 @@ location /coupdoeil {
   proxy_pass        $upstream_node_coupdoeil;
   include /etc/nginx/conf.d/component_base_auth.include;
 }
-
-
-# Chargement de /publication via dev React
-# /publication
-# /publication/sock-js.node
-# /publication/main.*
-# /publication/static/*
-#location ~ (^/publication/?$|^/publication/(sockjs-node|static|main\..*|.*\.hot-update.json)) {
-#  # Protection via auth plugin
-#  proxy_pass        $upstream_react_publication;
-#
-#  include /etc/nginx/conf.d/component_base_auth.include;
-#}
-#location /publication {
-#  proxy_pass        $upstream_node_publication;
-#
-#  include /etc/nginx/conf.d/component_base_auth.include;
-#}
-
-# Chargement de /vitrine via dev React
-# /vitrine
-# /vitrine/sock-js.node
-# /vitrine/main.*
-# /vitrine/static/*
-# NOTE : s'assurer que /var/opt/millegrilles est o+rx
-location = /vitrine/index.json {
-  expires 0s;
-  root /var/opt/millegrilles/nginx/data;
-}
-location /vitrine/data {
-  expires 0s;
-  root /var/opt/millegrilles/nginx/data;
-}
-#location /vitrine {
-#  expires 0s;
-#  root /var/opt/millegrilles/nginx/html;
-#}
-#location /vitrine/posts {
-#  alias /var/opt/millegrilles/nginx/data/vitrine/posts;
-#}
-#location /vitrine/collections {
-#  alias /var/opt/millegrilles/nginx/data/vitrine/collections;
-#}
-location ~ (^/vitrine$|^/vitrine/(sockjs-node|static|main\..*|.*\.hot-update.json|locales)) {
-  proxy_pass        $upstream_react_vitrine;
-  proxy_set_header  X-Real-IP $remote_addr;
-  proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header  X-Forwarded-Proto $scheme;
-
-  # Support WSS
-  proxy_set_header  Upgrade $http_upgrade;
-  proxy_set_header  Connection $connection_upgrade;
-  proxy_set_header  Host $host;
-}
-#location /vitrine/section {
-#  # rewrite ^(.*)$ /vitrine/index.html;
-#  proxy_pass        $upstream_react_vitrine;
-#}
-#location = /vitrine/ {
-#  return 301 https://$http_host/vitrine;
-#}
-location /vitrine/socket.io {
-  proxy_pass $upstream_node_vitrine;
-  include /etc/nginx/conf.d/component_base.include;
-}
-#location /vitrine {
-#  expires 0s;
-#  proxy_pass $upstream_node_vitrine;
-#  include /etc/nginx/conf.d/component_base.include;
-#}
-location = /vitrine {
-  return 301 https://$http_host/vitrine/;
-}
-
-location /vitrine {
-  proxy_pass $upstream_react_vitrine;
-  include /etc/nginx/conf.d/component_base.include;
-}
-#location = /vitrine {
-#  rewrite ^(.*)$ /vitrine/index.html;
-#}
-#location /vitrine_site1 {
-#  alias /var/opt/millegrilles/nginx/html/vitrine;
-#  include /etc/nginx/conf.d/component_base.include;
-#}
 
 # Chargement de /senseurspassifs via dev React
 # /senseurspassifs
@@ -350,7 +259,13 @@ location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-upda
 }
 location /messagerie/poster {
   proxy_pass $upstream_node_messagerie;
-  include /etc/nginx/conf.d/component_base.include;
+  # include /etc/nginx/conf.d/component_base.include;
+
+  include /etc/nginx/conf.d/component_proxyheaders.include;
+  include /etc/nginx/conf.d/component_gzip.include;
+
+  # Max upload poster pour message/fichier (batch)
+  client_max_body_size 5M;
 }
 location /messagerie {
   proxy_pass $upstream_node_messagerie;
