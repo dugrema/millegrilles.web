@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.webappbase",
-  "version": "2022.2.1",
+  "version": "2022.2.2",
   "description": "Base d'application webs pour MilleGrilles",
   "main": "index.js",
   "scripts": {
