@@ -239,12 +239,12 @@ location ~ (^/collections$|^/collections/(sockjs-node|static|main\..*|.*\.hot-up
 location = /collections/fichiers/verifier {
   proxy_pass  $upstream_node_collections;
   proxy_pass_request_body off; # no need to send the POST body
-  # return 200;
+  #return 200;
 }
 location /collections/fichiers {
-  proxy_pass $upstream_node_fichiers;
-
   rewrite ^(/collections/fichiers/)(.*)$ /fichiers_transfert/$2 break;
+
+  proxy_pass $upstream_node_fichiers;
 
   # Activer l'auth plugin
   auth_request      /collections/fichiers/verifier;
@@ -265,7 +265,7 @@ location /collections {
   include /etc/nginx/conf.d/component_proxyheaders.include;
   include /etc/nginx/conf.d/component_gzip.include;
   proxy_read_timeout 120s;
-  client_max_body_size 5M;
+  client_max_body_size 64k;
 }
 
 # Chargement de /collections via dev React
