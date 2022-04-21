@@ -242,6 +242,10 @@ location = /collections/fichiers/verifier {
   #return 200;
 }
 location /collections/fichiers {
+  if ($request_method !~ GET|OPTIONS) {
+    return 405;
+  }
+
   rewrite ^(/collections/fichiers/)(.*)$ /fichiers_transfert/$2 break;
 
   proxy_pass $upstream_node_fichiers;
@@ -257,6 +261,13 @@ location /collections/fichiers {
   include /etc/nginx/conf.d/component_fichiers.include;
   include /etc/nginx/conf.d/modules/proxy_tls.include;
 }
+location /collections/upload {
+  proxy_pass $upstream_node_collections;
+  include /etc/nginx/conf.d/auth.include;
+  include /etc/nginx/conf.d/component_proxyheaders.include;
+  proxy_read_timeout 30s;
+  client_max_body_size 5m;
+}
 location /collections {
   proxy_pass $upstream_node_collections;
   # include /etc/nginx/conf.d/component_base_auth.include;
@@ -264,7 +275,7 @@ location /collections {
 
   include /etc/nginx/conf.d/component_proxyheaders.include;
   include /etc/nginx/conf.d/component_gzip.include;
-  proxy_read_timeout 120s;
+  proxy_read_timeout 15m;  # Utilise pour socket.io
   client_max_body_size 64k;
 }
 
