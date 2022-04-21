@@ -9,7 +9,7 @@ set $upstream_node_millegrilles   https://192.168.2.196:3001;
 set $upstream_react_millegrilles  https://192.168.2.196:3001;   # 3002 separe
 
 set $upstream_node_coupdoeil      https://192.168.2.196:3003;
-set $upstream_react_coupdoeil     https://192.168.2.196:3004;   # 3004
+set $upstream_react_coupdoeil     https://192.168.2.196:3003;   # 3004
 
 set $upstream_node_senseurspassifs  https://192.168.2.196:3013;
 set $upstream_react_senseurspassifs https://192.168.2.196:3013;  # 3014
@@ -26,7 +26,7 @@ set $upstream_react_commondm      https://192.168.2.196:3032;
 set $upstream_react_reactjs       https://192.168.2.196:3036;  # 3036
 
 set $upstream_node_collections    https://192.168.2.196:3037;
-set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
+set $upstream_react_collections   https://192.168.2.196:3038;  # 3038
 
 set $upstream_node_messagerie     https://192.168.2.196:3039;
 set $upstream_react_messagerie    https://192.168.2.196:3039;  # 3040
@@ -72,37 +72,37 @@ location /certissuer {
   include /etc/nginx/conf.d/component_base.include;
 }
 
-location /fichiers/public3 {
-  # Redirect pour AWS S3/CloudFront
-  if ($args ~* "preview=1") {
-    rewrite ^/fichiers/(public/[0-9a-f\-]+).*$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1_preview_$arg_preview? redirect;
-  }
-  if ($args ~* "video=[0-9p]+") {
-    rewrite ^/fichiers/(public/[0-9a-f\-]+).*$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1_video_$arg_video? redirect;
-  }
-  rewrite ^/fichiers/(public/.*)$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1 redirect;
-}
+#location /fichiers/public3 {
+#  # Redirect pour AWS S3/CloudFront
+#  if ($args ~* "preview=1") {
+#    rewrite ^/fichiers/(public/[0-9a-f\-]+).*$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1_preview_$arg_preview? redirect;
+#  }
+#  if ($args ~* "video=[0-9p]+") {
+#    rewrite ^/fichiers/(public/[0-9a-f\-]+).*$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1_video_$arg_video? redirect;
+#  }
+#  rewrite ^/fichiers/(public/.*)$ https://d2skvkszw3g274.cloudfront.net/QME8SjhaCFySD9qBt1AikQ1U7WxieJY2xDg2JCMczJST/$1 redirect;
+#}
 
-location /fichiers/ {
-  proxy_pass $upstream_node_fichiers;
-  include /etc/nginx/conf.d/auth.include;
-  include /etc/nginx/conf.d/component_fichiers.include;
-  include /etc/nginx/conf.d/modules/proxy_tls.include;
-}
+#location /fichiers/ {
+#  proxy_pass $upstream_node_fichiers;
+#  include /etc/nginx/conf.d/auth.include;
+#  include /etc/nginx/conf.d/component_fichiers.include;
+#  include /etc/nginx/conf.d/modules/proxy_tls.include;
+#}
 
-location /backup/ {
-  proxy_pass        $upstream_node_fichiers;
-
-  # Mapping certificat client pour connexion consignationfichiers
-  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
-  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
-
-  #proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
-  #proxy_ssl_verify       on;
-  #proxy_ssl_verify_depth 1;
-
-  include /etc/nginx/conf.d/component_base_auth.include;
-}
+#location /backup/ {
+#  proxy_pass        $upstream_node_fichiers;
+#
+#  # Mapping certificat client pour connexion consignationfichiers
+#  proxy_ssl_certificate     /certs_mg/pki.nginx.cert;
+#  proxy_ssl_certificate_key /certs_mg/pki.nginx.key;
+#
+#  #proxy_ssl_trusted_certificate /certs_mg/pki.millegrille;
+#  #proxy_ssl_verify       on;
+#  #proxy_ssl_verify_depth 1;
+#
+#  include /etc/nginx/conf.d/component_base_auth.include;
+#}
 
 # Verification de l'authentification
 # Invoque pour **chaque** appel a nginx sous une page prive/protegee
@@ -235,6 +235,27 @@ location ~ (^/collections$|^/collections/(sockjs-node|static|main\..*|.*\.hot-up
 
   # Support WSS
   proxy_set_header  Host $host;
+}
+location = /collections/fichiers/verifier {
+  proxy_pass  $upstream_node_collections;
+  proxy_pass_request_body off; # no need to send the POST body
+  # return 200;
+}
+location /collections/fichiers {
+  proxy_pass $upstream_node_fichiers;
+
+  rewrite ^(/collections/fichiers/)(.*)$ /fichiers_transfert/$2 break;
+
+  # Activer l'auth plugin
+  auth_request      /collections/fichiers/verifier;
+  # Override header verified, aucun check SSL requis (cert nginx uniquement)
+  proxy_set_header VERIFIED INTERNAL;
+  proxy_set_header  Host              $host;
+  proxy_set_header  X-Hostname        $hostname;
+
+  # Config commune pour acces a consignation
+  include /etc/nginx/conf.d/component_fichiers.include;
+  include /etc/nginx/conf.d/modules/proxy_tls.include;
 }
 location /collections {
   proxy_pass $upstream_node_collections;

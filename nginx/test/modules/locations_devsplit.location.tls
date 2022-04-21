@@ -2,7 +2,6 @@ resolver 192.168.2.1 valid=30s;
 
 # Remplacer les proxy_pass des modules a tester
 
-set $upstream_node_millegrilles   https://192.168.2.196:3001;
 set $upstream_node_fichiers       https://mg-dev5:3021;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
