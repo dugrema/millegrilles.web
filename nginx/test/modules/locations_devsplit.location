@@ -1,4 +1,5 @@
 resolver 192.168.2.1 valid=30s;
+error_log /nginx_logs/nginx.error.log debug;
 
 # Remplacer les proxy_pass des modules a tester
 
@@ -26,10 +27,10 @@ set $upstream_react_commondm      https://192.168.2.196:3032;
 set $upstream_react_reactjs       https://192.168.2.196:3036;  # 3036
 
 set $upstream_node_collections    https://192.168.2.196:3037;
-set $upstream_react_collections   https://192.168.2.196:3038;  # 3038
+set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
 
 set $upstream_node_messagerie     https://192.168.2.196:3039;
-set $upstream_react_messagerie    https://192.168.2.196:3039;  # 3040
+set $upstream_react_messagerie    https://192.168.2.196:3040;  # 3040
 
 # set $upstream_rabbitmq            https://192.168.2.196:8443;
 
@@ -289,6 +290,11 @@ location ~ (^/messagerie$|^/messagerie/(sockjs-node|static|main\..*|.*\.hot-upda
  # Support WSS
  proxy_set_header  Host $host;
 }
+location = /messagerie/fichiers/verifier {
+  proxy_pass  $upstream_node_messagerie;
+  proxy_pass_request_body off; # no need to send the POST body
+  #return 200;
+}
 location /messagerie/poster {
   proxy_pass $upstream_node_messagerie;
   # include /etc/nginx/conf.d/component_base.include;
@@ -298,6 +304,33 @@ location /messagerie/poster {
 
   # Max upload poster pour message/fichier (batch)
   client_max_body_size 5M;
+}
+location /messagerie/fichiers {
+  if ($request_method !~ GET|OPTIONS) {
+    return 405;
+  }
+
+  rewrite ^(/messagerie/fichiers/)(.*)$ /fichiers_transfert/$2 break;
+
+  proxy_pass $upstream_node_fichiers;
+
+  # Activer l'auth plugin
+  auth_request      /messagerie/fichiers/verifier;
+  # Override header verified, aucun check SSL requis (cert nginx uniquement)
+  proxy_set_header VERIFIED INTERNAL;
+  proxy_set_header  Host              $host;
+  proxy_set_header  X-Hostname        $hostname;
+
+  # Config commune pour acces a consignation
+  include /etc/nginx/conf.d/component_fichiers.include;
+  include /etc/nginx/conf.d/modules/proxy_tls.include;
+}
+location /messagerie/upload {
+  proxy_pass $upstream_node_messagerie;
+  include /etc/nginx/conf.d/auth.include;
+  include /etc/nginx/conf.d/component_proxyheaders.include;
+  proxy_read_timeout 30s;
+  client_max_body_size 5m;
 }
 location /messagerie {
   proxy_pass $upstream_node_messagerie;

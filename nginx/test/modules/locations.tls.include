@@ -1,2 +1,0 @@
-# Developpement avec apps sur ports locaux differents
-include /etc/nginx/conf.d/modules/locations_devsplit.tls.include;

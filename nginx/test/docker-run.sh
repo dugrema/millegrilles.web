@@ -30,4 +30,5 @@ docker run --rm -it \
   -v /home/mathieu/mgdev/certs:/certs_mg \
   -v $MILLEGRILLES_FOLDER:$MILLEGRILLES_FOLDER \
   -v $MILLEGRILLES_FOLDER/nginx/html:/usr/share/nginx/files \
+  -v /tmp/nginx_logs:/nginx_logs \
   $IMAGE_DOCKER
