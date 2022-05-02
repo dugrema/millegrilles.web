@@ -13,7 +13,7 @@ set $upstream_node_coupdoeil      https://192.168.2.196:3003;
 set $upstream_react_coupdoeil     https://192.168.2.196:3003;   # 3004
 
 set $upstream_node_senseurspassifs  https://192.168.2.196:3013;
-set $upstream_react_senseurspassifs https://192.168.2.196:3013;  # 3014
+set $upstream_react_senseurspassifs https://192.168.2.196:3014;  # 3014
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 

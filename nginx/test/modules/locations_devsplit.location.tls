@@ -2,6 +2,7 @@ resolver 192.168.2.1 valid=30s;
 
 # Remplacer les proxy_pass des modules a tester
 
+set $upstream_monitor             http://192.168.2.196:8280;
 set $upstream_node_millegrilles   https://192.168.2.196:3001;
 set $upstream_node_fichiers       https://mg-dev5:3021;
 
@@ -36,4 +37,10 @@ location = /millegrilles/authentification/verifier_tlsclient {
   proxy_set_header X-Client-Issuer-DN $ssl_client_i_dn;
   proxy_set_header X-Client-Cert      $ssl_client_cert;
   proxy_set_header DN                 $ssl_client_s_dn;  
+}
+
+# Monitor
+location /administration {
+  proxy_pass        $upstream_monitor;
+  include /etc/nginx/conf.d/component_base.include;
 }
