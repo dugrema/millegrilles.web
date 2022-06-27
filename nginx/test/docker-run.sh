@@ -27,7 +27,8 @@ docker run --rm -it \
   -v $CONF_FOLDER:/etc/nginx/conf.d \
   -v $MODS_FOLDER:/etc/nginx/conf.d/modules \
   -v acmesh-data:/certs \
-  -v /home/mathieu/mgdev/certs:/certs_mg \
+  -v /var/opt/millegrilles/secrets:/certs_mg \
+  -v /var/opt/millegrilles/configuration:/configuration_mg \
   -v $MILLEGRILLES_FOLDER:$MILLEGRILLES_FOLDER \
   -v $MILLEGRILLES_FOLDER/nginx/html:/usr/share/nginx/files \
   -v /tmp/nginx_logs:/nginx_logs \

@@ -3,8 +3,8 @@ error_log /nginx_logs/nginx.error.log debug;
 
 # Remplacer les proxy_pass des modules a tester
 
-set $upstream_monitor             http://192.168.2.196:8280;
-set $upstream_certissuer          http://192.168.2.196:8380;
+set $upstream_monitor             https://192.168.2.196:2443;
+set $upstream_certissuer          http://192.168.2.196:2080;
 
 set $upstream_node_millegrilles   https://192.168.2.196:3001;
 set $upstream_react_millegrilles  https://192.168.2.196:3001;   # 3002 separe
@@ -17,7 +17,7 @@ set $upstream_react_senseurspassifs https://192.168.2.196:3014;  # 3014
 
 set $upstream_redmine             https://mg-dev4.maple.maceroc.com:3011;
 
-set $upstream_node_fichiers       https://mg-dev5:3021;
+set $upstream_node_fichiers       https://localhost:3021;
 
 set $upstream_node_place          https://192.168.2.196:3027;
 set $upstream_react_place         https://192.168.2.196:3027;  # 3028
@@ -27,7 +27,7 @@ set $upstream_react_commondm      https://192.168.2.196:3032;
 set $upstream_react_reactjs       https://192.168.2.196:3036;  # 3036
 
 set $upstream_node_collections    https://192.168.2.196:3037;
-set $upstream_react_collections   https://192.168.2.196:3037;  # 3038
+set $upstream_react_collections   https://192.168.2.196:3038;  # 3038
 
 set $upstream_node_messagerie     https://192.168.2.196:3039;
 set $upstream_react_messagerie    https://192.168.2.196:3040;  # 3040
@@ -315,14 +315,38 @@ location /messagerie/fichiers {
   proxy_pass $upstream_node_fichiers;
 
   # Activer l'auth plugin
-  auth_request      /messagerie/fichiers/verifier;
+  #auth_request      /messagerie/fichiers/verifier;
   # Override header verified, aucun check SSL requis (cert nginx uniquement)
   proxy_set_header VERIFIED INTERNAL;
   proxy_set_header  Host              $host;
   proxy_set_header  X-Hostname        $hostname;
 
   # Config commune pour acces a consignation
-  include /etc/nginx/conf.d/component_fichiers.include;
+  #include /etc/nginx/conf.d/component_fichiers.include;
+
+  # ---- tweaks , tests ------
+  include /etc/nginx/conf.d/component_proxyheaders.include;
+  #include /etc/nginx/conf.d/component_gzip.include;
+  #include /etc/nginx/conf.d/component_cors.include;
+
+  slice 5m;
+  #proxy_cache       cache_fichiers;
+  #proxy_cache_lock  on;
+  #proxy_cache_background_update on;
+  #proxy_cache_use_stale error timeout updating
+  #                      http_500 http_502 http_503 http_504;
+
+  #proxy_cache_key   $uri$is_args$args$slice_range;
+  #proxy_set_header  Range $slice_range;
+  #proxy_cache_valid 200 201 202 206 1d;
+  #proxy_cache_valid 404 15s;
+  #proxy_cache_valid 401 403 500 502 503 504 5s;
+
+  #proxy_read_timeout 120s;
+  client_max_body_size 5m;  # Limite batch upload
+  # ----------
+
+
   include /etc/nginx/conf.d/modules/proxy_tls.include;
 }
 location /messagerie/upload {

@@ -4,7 +4,7 @@ resolver 192.168.2.1 valid=30s;
 
 set $upstream_monitor             http://192.168.2.196:8280;
 set $upstream_node_millegrilles   https://192.168.2.196:3001;
-set $upstream_node_fichiers       https://mg-dev5:3021;
+set $upstream_node_fichiers       https://localhost:3021;
 
 include /etc/nginx/conf.d/modules/error_page.conf.include;
 
