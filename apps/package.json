@@ -1,6 +1,6 @@
 {
   "name": "millegrilles.webappbase",
-  "version": "2022.2.2",
+  "version": "2022.4.0",
   "description": "Base d'application webs pour MilleGrilles",
   "main": "index.js",
   "scripts": {
@@ -17,11 +17,11 @@
   },
   "homepage": "https://github.com/dugrema/millegrilles.web#readme",
   "dependencies": {
-    "@dugrema/millegrilles.nodejs": "github:dugrema/millegrilles.nodejs#2022.2",
-    "express": "^4.17.3"
+    "@dugrema/millegrilles.nodejs": "github:dugrema/millegrilles.nodejs#2022.4",
+    "express": "~4.18.1"
   },
   "peerDependencies": {
-    "@dugrema/millegrilles.utiljs": "github:dugrema/millegrilles.utiljs#2022.2",
+    "@dugrema/millegrilles.utiljs": "github:dugrema/millegrilles.utiljs#2022.4",
     "@dugrema/node-forge": "github:dugrema/forge#ed25519"
   }
 }
