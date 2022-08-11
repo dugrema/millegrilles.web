@@ -10,5 +10,5 @@ proxy_set_header  Host        $host;
 # Transmettre information SSL client si disponible
 proxy_set_header VERIFIED           $ssl_client_verify;
 proxy_set_header X-Client-Issuer-DN $ssl_client_i_dn;
-proxy_set_header X-Client-Cert      $ssl_client_cert;
+# proxy_set_header X-Client-Cert      $ssl_client_cert;  # nodejs 16.16.0+ ne supporte pas headers avec contenu \r\n
 proxy_set_header DN                 $ssl_client_s_dn;
