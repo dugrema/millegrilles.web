@@ -11,7 +11,7 @@ include /etc/nginx/conf.d/component_cors.include;
 #                      http_500 http_502 http_503 http_504;
 
 #proxy_cache_key   $uri$is_args$args$slice_range;
-proxy_set_header  Range $slice_range;
+#proxy_set_header  Range $slice_range;
 #proxy_cache_valid 200 201 202 206 2h;
 #proxy_cache_valid 404 3s;
 #proxy_cache_valid 401 403 500 502 503 504 5s;
