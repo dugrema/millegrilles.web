@@ -1,6 +1,0 @@
-**/node_modules
-**/dist
-**/build
-**/static
-*.local
-*.tar.gz
