@@ -1,0 +1,31 @@
+<script>
+    const text1 = "<think> \n Some thinking. \nMore thinking.</think>\nOutput text\n";
+    const text2 = "<think>\nSome thinking.\nNot finished yet.";
+    const text3 = "<think>\nSome thinking.\nMore thinking.</think><think>Some thinking 2.\nMore thinking 2.</think>\nOutput text\n";
+    const text4 = "<think>\nSome thinking.\nMore thinking.</think><think>Some thinking 2.";
+    
+    function parseThinkBlocks(content) {
+        const regex = /(<think>.*[^<]*)/g;
+        // const matches = regex.exec(content);
+        const matches = content.match(regex);
+        console.debug("Content: %O\nMatches: ", content, matches);
+
+        let output = content;
+        for(const match of matches) {
+            output = output.replace(match, '').replace('</think>', '');
+        }
+        let thinkBlocks = matches.join('\n---\n');
+        thinkBlocks = thinkBlocks.replaceAll('<think>', '').replaceAll('</think>', '');
+        console.debug("Think blocks: %O\nContent: %O", thinkBlocks, output);
+    }
+
+    console.warn("Text 1");
+    parseThinkBlocks(text1);
+    console.warn("Text 2");
+    parseThinkBlocks(text2);
+    console.warn("Text 3");
+    parseThinkBlocks(text3);
+    console.warn("Text 4");
+    parseThinkBlocks(text4);
+
+</script>
